@@ -43,7 +43,7 @@ export default function ChatInput({ onSendMessage, onVoiceToggle, isListening, d
                     : 'bg-[var(--bg-tertiary)] hover:bg-[var(--border-light)] text-[var(--fg-secondary)] hover:text-[var(--fg)]'
                   }`}
                 disabled={disabled}
-                title={isListening ? 'Stop voice conversation' : 'Start voice conversation'}
+                title={isListening ? 'Остановить голосовой разговор' : 'Начать голосовой разговор'}
               >
                 {isListening ? <MicOff size={18} className="sm:w-5 sm:h-5" /> : <Mic size={18} className="sm:w-5 sm:h-5" />}
               </button>
@@ -54,7 +54,7 @@ export default function ChatInput({ onSendMessage, onVoiceToggle, isListening, d
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Type your message or use voice..."
+                  placeholder="Напишите сообщение или используйте голос..."
                   className="w-full bg-transparent text-[var(--fg)] placeholder-[var(--fg-muted)] resize-none outline-none min-h-[40px] sm:min-h-[48px] max-h-32 py-2.5 sm:py-3 px-0 text-sm sm:text-base"
                   disabled={disabled}
                   rows={1}
@@ -73,7 +73,7 @@ export default function ChatInput({ onSendMessage, onVoiceToggle, isListening, d
                     ? 'bg-[var(--accent)] text-white hover:bg-[var(--accent-light)] hover:shadow-lg hover:shadow-[var(--accent-glow)] transform hover:scale-105'
                     : 'bg-[var(--bg-tertiary)] text-[var(--fg-muted)] cursor-not-allowed'
                   }`}
-                title={!message.trim() ? 'Type a message to send' : 'Send message'}
+                title={!message.trim() ? 'Напишите сообщение для отправки' : 'Отправить сообщение'}
               >
                 <Send size={18} className="sm:w-5 sm:h-5" />
               </button>

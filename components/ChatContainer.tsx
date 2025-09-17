@@ -38,10 +38,10 @@ export default function ChatContainer({ messages, isVisible }: ChatContainerProp
             <div className="flex-shrink-0 mb-4">
               <div className="bg-[var(--bg-secondary)]/80 backdrop-blur-xl border border-[var(--border)] rounded-2xl p-4 pointer-events-auto">
                 <h2 className="text-lg font-semibold text-[var(--fg)] mb-1">
-                  Voice Conversation
+                  Голосовой разговор
                 </h2>
                 <p className="text-sm text-[var(--fg-secondary)]">
-                  Chat or speak with your AI assistant
+                  Общайтесь с вашим ИИ-помощником
                 </p>
               </div>
             </div>
@@ -62,8 +62,8 @@ export default function ChatContainer({ messages, isVisible }: ChatContainerProp
                         transition={{ duration: 2, repeat: Infinity }}
                       />
                     </div>
-                    <p className="text-lg font-medium mb-2">Ready to chat</p>
-                    <p className="text-sm">Start a conversation by typing or speaking</p>
+                    <p className="text-lg font-medium mb-2">Готов к общению</p>
+                    <p className="text-sm">Начните разговор, написав или проговорив сообщение</p>
                   </div>
                 </div>
               ) : (

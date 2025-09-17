@@ -10,12 +10,12 @@ const interFont = Inter({
 
 const config = {
   url: 'https://ai-pulse.vercel.app',
-  title: 'Pulse - Voice AI Assistant',
-  description: 'Modern voice interactions with AI using ElevenLabs conversational AI technology.',
+  title: 'A.D.A.M. - Умный Голосовой Помощник',
+  description: 'Современные голосовые взаимодействия с ИИ для управления умным домом и мониторинга здоровья.',
 }
 
 const btoa = (str: string) => Buffer.from(str).toString('base64')
-const images = `https://neon.tech/docs/og?title=${btoa('Pulse')}&breadcrumb=${btoa(config.title)}`
+const images = `https://neon.tech/docs/og?title=${btoa('A.D.A.M.')}&breadcrumb=${btoa(config.title)}`
 
 export const metadata: Metadata = {
   title: config.title,

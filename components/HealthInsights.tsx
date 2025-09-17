@@ -34,34 +34,34 @@ interface HealthInsightsProps {
 const healthMetrics: HealthMetric[] = [
   {
     id: 'sleep',
-    name: 'Sleep Quality',
+    name: 'Качество сна',
     value: '8.2',
-    unit: 'hrs',
+    unit: 'час',
     trend: 'up',
     status: 'good',
     icon: <Moon size={20} />
   },
   {
     id: 'heart-rate',
-    name: 'Avg Heart Rate',
+    name: 'Средний пульс',
     value: 68,
-    unit: 'bpm',
+    unit: 'уд/мин',
     trend: 'stable',
     status: 'good',
     icon: <Heart size={20} />
   },
   {
     id: 'steps',
-    name: 'Daily Steps',
+    name: 'Шаги за день',
     value: '12,450',
-    unit: 'steps',
+    unit: 'шагов',
     trend: 'up',
     status: 'good',
     icon: <Activity size={20} />
   },
   {
     id: 'temperature',
-    name: 'Body Temp',
+    name: 'Темп. тела',
     value: '36.6',
     unit: '°C',
     trend: 'stable',
@@ -71,10 +71,10 @@ const healthMetrics: HealthMetric[] = [
 ]
 
 const sleepData = {
-  totalSleep: '8h 15m',
-  deepSleep: '2h 30m',
-  lightSleep: '4h 45m',
-  remSleep: '1h 00m',
+  totalSleep: '8ч 15м',
+  deepSleep: '2ч 30м',
+  lightSleep: '4ч 45м',
+  remSleep: '1ч 00м',
   bedtime: '23:30',
   wakeTime: '07:45',
   sleepScore: 87
@@ -82,30 +82,48 @@ const sleepData = {
 
 const healthTips = [
   {
-    title: 'Great Sleep Pattern!',
-    description: 'You\'ve maintained consistent sleep for 7 days. Keep it up!',
+    title: 'Отличный режим сна!',
+    description: 'Вы поддерживаете стабильный сон 7 дней. Продолжайте в том же духе!',
     type: 'achievement'
   },
   {
-    title: 'Stay Hydrated',
-    description: 'Your room temperature is slightly high. Consider drinking more water.',
+    title: 'Пейте больше воды',
+    description: 'Температура в комнате немного повышена. Рекомендуем пить больше воды.',
     type: 'tip'
   },
   {
-    title: 'Active Day Ahead',
-    description: 'Weather is perfect for outdoor activities. Plan a walk!',
+    title: 'Активный день впереди',
+    description: 'Погода идеальна для прогулок на свежем воздухе. Запланируйте прогулку!',
     type: 'suggestion'
   }
 ]
 
 const weeklyActivity = [
-  { day: 'Mon', steps: 8500, sleep: 7.5 },
-  { day: 'Tue', steps: 12200, sleep: 8.2 },
-  { day: 'Wed', steps: 10800, sleep: 7.8 },
-  { day: 'Thu', steps: 9600, sleep: 8.0 },
-  { day: 'Fri', steps: 11400, sleep: 7.2 },
-  { day: 'Sat', steps: 15200, sleep: 8.5 },
-  { day: 'Sun', steps: 12450, sleep: 8.2 }
+  { day: 'Пн', steps: 8500, sleep: 7.5, heartRate: 65, calories: 1950 },
+  { day: 'Вт', steps: 12200, sleep: 8.2, heartRate: 68, calories: 2150 },
+  { day: 'Ср', steps: 10800, sleep: 7.8, heartRate: 72, calories: 2050 },
+  { day: 'Чт', steps: 9600, sleep: 8.0, heartRate: 69, calories: 1980 },
+  { day: 'Пт', steps: 11400, sleep: 7.2, heartRate: 75, calories: 2100 },
+  { day: 'Сб', steps: 15200, sleep: 8.5, heartRate: 63, calories: 2300 },
+  { day: 'Вс', steps: 12450, sleep: 8.2, heartRate: 67, calories: 2000 }
+]
+
+const stressLevels = [
+  { time: '06:00', level: 15 },
+  { time: '09:00', level: 45 },
+  { time: '12:00', level: 35 },
+  { time: '15:00', level: 65 },
+  { time: '18:00', level: 40 },
+  { time: '21:00', level: 25 },
+  { time: '00:00', level: 10 }
+]
+
+const healthGoals = [
+  { name: 'Шаги в день', current: 12450, target: 10000, unit: 'шагов', achieved: true },
+  { name: 'Часы сна', current: 8.2, target: 8.0, unit: 'часов', achieved: true },
+  { name: 'Потребление воды', current: 6, target: 8, unit: 'стаканов', achieved: false },
+  { name: 'Активные минуты', current: 45, target: 30, unit: 'минут', achieved: true },
+  { name: 'Медитация', current: 15, target: 20, unit: 'минут', achieved: false }
 ]
 
 const getStatusColor = (status: HealthMetric['status']) => {
@@ -126,7 +144,7 @@ const getTrendIcon = (trend: HealthMetric['trend']) => {
 }
 
 export default function HealthInsights({ isVisible, onClose }: HealthInsightsProps) {
-  const [selectedTab, setSelectedTab] = useState<'overview' | 'sleep' | 'activity'>('overview')
+  const [selectedTab, setSelectedTab] = useState<'overview' | 'sleep' | 'activity' | 'stress'>('overview')
 
   return (
     <AnimatePresence>
@@ -148,7 +166,7 @@ export default function HealthInsights({ isVisible, onClose }: HealthInsightsPro
             <div className="flex items-center justify-between p-4 border-b border-[var(--border)] bg-[var(--bg-secondary)]">
               <div className="flex items-center gap-3">
                 <Activity size={24} className="text-[var(--accent)]" />
-                <h2 className="text-xl font-semibold text-[var(--fg)]">Health & Insights</h2>
+                <h2 className="text-xl font-semibold text-[var(--fg)]">Здоровье и аналитика</h2>
               </div>
               <button
                 onClick={onClose}
@@ -161,9 +179,10 @@ export default function HealthInsights({ isVisible, onClose }: HealthInsightsPro
             {/* Tabs */}
             <div className="flex border-b border-[var(--border)] bg-[var(--bg-secondary)]">
               {[
-                { id: 'overview', label: 'Overview', icon: <Activity size={16} /> },
-                { id: 'sleep', label: 'Sleep', icon: <Moon size={16} /> },
-                { id: 'activity', label: 'Activity', icon: <Zap size={16} /> }
+                { id: 'overview', label: 'Обзор', icon: <Activity size={16} /> },
+                { id: 'sleep', label: 'Сон', icon: <Moon size={16} /> },
+                { id: 'activity', label: 'Активность', icon: <Zap size={16} /> },
+                { id: 'stress', label: 'Самочувствие', icon: <Heart size={16} /> }
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -186,7 +205,7 @@ export default function HealthInsights({ isVisible, onClose }: HealthInsightsPro
                 <div className="p-4 space-y-6">
                   {/* Health Metrics Grid */}
                   <div>
-                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Today's Health</h3>
+                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Здоровье сегодня</h3>
                     <div className="grid grid-cols-2 gap-3">
                       {healthMetrics.map((metric) => (
                         <motion.div
@@ -212,7 +231,7 @@ export default function HealthInsights({ isVisible, onClose }: HealthInsightsPro
 
                   {/* Health Tips */}
                   <div>
-                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Insights & Tips</h3>
+                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Советы и рекомендации</h3>
                     <div className="space-y-3">
                       {healthTips.map((tip, index) => (
                         <div key={index} className="bg-[var(--bg-secondary)] rounded-xl p-4">
@@ -244,28 +263,28 @@ export default function HealthInsights({ isVisible, onClose }: HealthInsightsPro
                   {/* Sleep Score */}
                   <div className="bg-[var(--bg-secondary)] rounded-xl p-4 text-center">
                     <div className="text-4xl font-bold text-[var(--accent)] mb-2">{sleepData.sleepScore}</div>
-                    <div className="text-sm text-[var(--fg-secondary)]">Sleep Score</div>
-                    <div className="text-xs text-[var(--success)] mt-1">Excellent</div>
+                    <div className="text-sm text-[var(--fg-secondary)]">Оценка сна</div>
+                    <div className="text-xs text-[var(--success)] mt-1">Отлично</div>
                   </div>
 
                   {/* Sleep Breakdown */}
                   <div>
-                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Last Night</h3>
+                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Прошлая ночь</h3>
                     <div className="space-y-3">
                       <div className="flex justify-between items-center bg-[var(--bg-secondary)] rounded-xl p-3">
-                        <span className="text-[var(--fg-secondary)]">Total Sleep</span>
+                        <span className="text-[var(--fg-secondary)]">Общее время сна</span>
                         <span className="font-semibold text-[var(--fg)]">{sleepData.totalSleep}</span>
                       </div>
                       <div className="flex justify-between items-center bg-[var(--bg-secondary)] rounded-xl p-3">
-                        <span className="text-[var(--fg-secondary)]">Deep Sleep</span>
+                        <span className="text-[var(--fg-secondary)]">Глубокий сон</span>
                         <span className="font-semibold text-[var(--success)]">{sleepData.deepSleep}</span>
                       </div>
                       <div className="flex justify-between items-center bg-[var(--bg-secondary)] rounded-xl p-3">
-                        <span className="text-[var(--fg-secondary)]">Light Sleep</span>
+                        <span className="text-[var(--fg-secondary)]">Лёгкий сон</span>
                         <span className="font-semibold text-[var(--accent)]">{sleepData.lightSleep}</span>
                       </div>
                       <div className="flex justify-between items-center bg-[var(--bg-secondary)] rounded-xl p-3">
-                        <span className="text-[var(--fg-secondary)]">REM Sleep</span>
+                        <span className="text-[var(--fg-secondary)]">Быстрый сон</span>
                         <span className="font-semibold text-[var(--warning)]">{sleepData.remSleep}</span>
                       </div>
                     </div>
@@ -273,17 +292,17 @@ export default function HealthInsights({ isVisible, onClose }: HealthInsightsPro
 
                   {/* Sleep Schedule */}
                   <div>
-                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Schedule</h3>
+                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Расписание</h3>
                     <div className="grid grid-cols-2 gap-3">
                       <div className="bg-[var(--bg-secondary)] rounded-xl p-4 text-center">
                         <Clock size={20} className="mx-auto mb-2 text-[var(--accent)]" />
                         <div className="text-lg font-bold text-[var(--fg)]">{sleepData.bedtime}</div>
-                        <div className="text-xs text-[var(--fg-secondary)]">Bedtime</div>
+                        <div className="text-xs text-[var(--fg-secondary)]">Отбой ко сну</div>
                       </div>
                       <div className="bg-[var(--bg-secondary)] rounded-xl p-4 text-center">
                         <Activity size={20} className="mx-auto mb-2 text-[var(--success)]" />
                         <div className="text-lg font-bold text-[var(--fg)]">{sleepData.wakeTime}</div>
-                        <div className="text-xs text-[var(--fg-secondary)]">Wake Time</div>
+                        <div className="text-xs text-[var(--fg-secondary)]">Пробуждение</div>
                       </div>
                     </div>
                   </div>
@@ -295,56 +314,161 @@ export default function HealthInsights({ isVisible, onClose }: HealthInsightsPro
                 <div className="p-4 space-y-6">
                   {/* Weekly Chart */}
                   <div>
-                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Weekly Activity</h3>
+                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Недельная активность</h3>
                     <div className="bg-[var(--bg-secondary)] rounded-xl p-4">
                       <div className="flex justify-between items-end h-32 mb-4">
                         {weeklyActivity.map((day, index) => (
                           <div key={day.day} className="flex flex-col items-center gap-2">
                             <div 
-                              className="w-6 bg-[var(--accent)] rounded-t"
+                              className="w-6 bg-[var(--accent)] rounded-t transition-all hover:bg-[var(--accent-light)]"
                               style={{ height: `${(day.steps / 16000) * 80}px` }}
+                              title={`${day.steps} steps`}
                             />
                             <span className="text-xs text-[var(--fg-secondary)]">{day.day}</span>
                           </div>
                         ))}
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-[var(--fg)]">12,450</div>
-                        <div className="text-sm text-[var(--fg-secondary)]">Steps Today</div>
+                        <div className="text-2xl font-bold text-[var(--fg)]">{weeklyActivity[6].steps.toLocaleString()}</div>
+                        <div className="text-sm text-[var(--fg-secondary)]">Шагов сегодня</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Heart Rate Trend */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Тренд пульса</h3>
+                    <div className="bg-[var(--bg-secondary)] rounded-xl p-4">
+                      <div className="flex justify-between items-end h-20 mb-4">
+                        {weeklyActivity.map((day, index) => (
+                          <div key={day.day} className="flex flex-col items-center gap-2">
+                            <div 
+                              className="w-4 bg-[var(--success)] rounded-t"
+                              style={{ height: `${((day.heartRate - 50) / 30) * 60}px` }}
+                              title={`${day.heartRate} bpm`}
+                            />
+                            <span className="text-xs text-[var(--fg-secondary)]">{day.day}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-[var(--fg)]">{weeklyActivity[6].heartRate}</div>
+                        <div className="text-sm text-[var(--fg-secondary)]">Средний пульс</div>
                       </div>
                     </div>
                   </div>
 
                   {/* Activity Goals */}
                   <div>
-                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Daily Goals</h3>
+                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Ежедневные цели</h3>
+                    <div className="space-y-3">
+                      {healthGoals.map((goal, index) => (
+                        <div key={goal.name} className="bg-[var(--bg-secondary)] rounded-xl p-4">
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-[var(--fg)]">{goal.name}</span>
+                            <span className="text-sm text-[var(--fg-secondary)]">
+                              {goal.current} / {goal.target} {goal.unit}
+                            </span>
+                          </div>
+                          <div className="w-full bg-[var(--bg-tertiary)] rounded-full h-2">
+                            <div 
+                              className={`h-2 rounded-full transition-all duration-500 ${
+                                goal.achieved ? 'bg-[var(--success)]' : 'bg-[var(--warning)]'
+                              }`} 
+                              style={{ width: `${Math.min((goal.current / goal.target) * 100, 100)}%` }} 
+                            />
+                          </div>
+                          {goal.achieved && (
+                            <div className="text-xs text-[var(--success)] mt-1">✓ Цель достигнута!</div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Wellness Tab */}
+              {selectedTab === 'stress' && (
+                <div className="p-4 space-y-6">
+                  {/* Stress Level Chart */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Уровень стресса сегодня</h3>
+                    <div className="bg-[var(--bg-secondary)] rounded-xl p-4">
+                      <div className="flex justify-between items-end h-24 mb-4">
+                        {stressLevels.map((point, index) => (
+                          <div key={point.time} className="flex flex-col items-center gap-2">
+                            <div 
+                              className={`w-3 rounded-t ${
+                                point.level <= 30 ? 'bg-[var(--success)]' :
+                                point.level <= 60 ? 'bg-[var(--warning)]' :
+                                'bg-[var(--error)]'
+                              }`}
+                              style={{ height: `${(point.level / 100) * 80}px` }}
+                              title={`${point.level}% stress at ${point.time}`}
+                            />
+                            <span className="text-xs text-[var(--fg-secondary)]">{point.time}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-[var(--success)]">Низкий</div>
+                        <div className="text-sm text-[var(--fg-secondary)]">Текущий уровень стресса</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Wellness Metrics */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Оценка самочувствия</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-[var(--bg-secondary)] rounded-xl p-4 text-center">
+                        <div className="text-3xl font-bold text-[var(--success)] mb-2">85</div>
+                        <div className="text-sm text-[var(--fg-secondary)]">Общее самочувствие</div>
+                        <div className="text-xs text-[var(--success)] mt-1">Отлично</div>
+                      </div>
+                      <div className="bg-[var(--bg-secondary)] rounded-xl p-4 text-center">
+                        <div className="text-3xl font-bold text-[var(--accent)] mb-2">92</div>
+                        <div className="text-sm text-[var(--fg-secondary)]">Качество сна</div>
+                        <div className="text-xs text-[var(--success)] mt-1">Превосходно</div>
+                      </div>
+                      <div className="bg-[var(--bg-secondary)] rounded-xl p-4 text-center">
+                        <div className="text-3xl font-bold text-[var(--warning)] mb-2">68</div>
+                        <div className="text-sm text-[var(--fg-secondary)]">Гидратация</div>
+                        <div className="text-xs text-[var(--warning)] mt-1">Требует внимания</div>
+                      </div>
+                      <div className="bg-[var(--bg-secondary)] rounded-xl p-4 text-center">
+                        <div className="text-3xl font-bold text-[var(--success)] mb-2">78</div>
+                        <div className="text-sm text-[var(--fg-secondary)]">Психическое здоровье</div>
+                        <div className="text-xs text-[var(--success)] mt-1">Хорошо</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Mindfulness */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Осознанность</h3>
                     <div className="space-y-3">
                       <div className="bg-[var(--bg-secondary)] rounded-xl p-4">
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-[var(--fg)]">Steps</span>
-                          <span className="text-sm text-[var(--fg-secondary)]">12,450 / 10,000</span>
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-[var(--fg)] font-medium">Дыхательное упражнение</span>
+                          <button className="px-3 py-1 bg-[var(--accent)] text-white rounded-lg text-sm">Начать</button>
                         </div>
-                        <div className="w-full bg-[var(--bg-tertiary)] rounded-full h-2">
-                          <div className="bg-[var(--success)] h-2 rounded-full" style={{ width: '100%' }} />
-                        </div>
+                        <div className="text-xs text-[var(--fg-secondary)]">5 минут • Снятие стресса</div>
                       </div>
                       <div className="bg-[var(--bg-secondary)] rounded-xl p-4">
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-[var(--fg)]">Active Minutes</span>
-                          <span className="text-sm text-[var(--fg-secondary)]">45 / 30</span>
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-[var(--fg)] font-medium">Сеанс медитации</span>
+                          <button className="px-3 py-1 bg-[var(--accent)] text-white rounded-lg text-sm">Начать</button>
                         </div>
-                        <div className="w-full bg-[var(--bg-tertiary)] rounded-full h-2">
-                          <div className="bg-[var(--accent)] h-2 rounded-full" style={{ width: '100%' }} />
-                        </div>
+                        <div className="text-xs text-[var(--fg-secondary)]">15 минут • Фокус и ясность</div>
                       </div>
                       <div className="bg-[var(--bg-secondary)] rounded-xl p-4">
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-[var(--fg)]">Calories</span>
-                          <span className="text-sm text-[var(--fg-secondary)]">1,850 / 2,200</span>
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-[var(--fg)] font-medium">Убаюкивающие истории</span>
+                          <button className="px-3 py-1 bg-[var(--accent)] text-white rounded-lg text-sm">Слушать</button>
                         </div>
-                        <div className="w-full bg-[var(--bg-tertiary)] rounded-full h-2">
-                          <div className="bg-[var(--warning)] h-2 rounded-full" style={{ width: '84%' }} />
-                        </div>
+                        <div className="text-xs text-[var(--fg-secondary)]">20 минут • Лучший сон</div>
                       </div>
                     </div>
                   </div>

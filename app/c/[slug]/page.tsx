@@ -5,11 +5,12 @@ import ChatInput from '@/components/ChatInput'
 import VoiceVisualizer from '@/components/VoiceVisualizer'
 import SmartHomeControl from '@/components/SmartHomeControl'
 import HealthInsights from '@/components/HealthInsights'
+import CustomizationPanel from '@/components/CustomizationPanel'
 import { type Role, useConversation } from '@11labs/react'
 import { motion } from 'framer-motion'
 import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-import { MessageSquare, X, Home, Activity } from 'react-feather'
+import { MessageSquare, X, Home, Activity, Settings } from 'react-feather'
 
 interface Message {
   id: string
@@ -24,6 +25,7 @@ export default function ConversationPage() {
   const [showChat, setShowChat] = useState(false)
   const [showSmartHome, setShowSmartHome] = useState(false)
   const [showHealthInsights, setShowHealthInsights] = useState(false)
+  const [showCustomization, setShowCustomization] = useState(false)
   const [isConnected, setIsConnected] = useState(false)
 
   const loadConversation = () => {
@@ -125,7 +127,8 @@ export default function ConversationPage() {
   }, [conversation, isConnected])
 
   const handleVoiceToggle = () => {
-    if (isConnected) {
+    console.log('Voice toggle clicked, current status:', conversation.status, 'isConnected:', isConnected)
+    if (conversation.status === 'connected' || isConnected) {
       disconnectConversation()
     } else {
       connectConversation()
@@ -164,6 +167,14 @@ export default function ConversationPage() {
     loadConversation()
   }, [slug])
 
+  // Sync isConnected state with conversation status
+  useEffect(() => {
+    const connected = conversation.status === 'connected'
+    if (connected !== isConnected) {
+      setIsConnected(connected)
+    }
+  }, [conversation.status, isConnected])
+
   useEffect(() => {
     return () => {
       if (isConnected) {
@@ -184,16 +195,34 @@ export default function ConversationPage() {
       <div className="fixed top-4 right-4 z-50 flex gap-2">
         <button
           onClick={() => {
+            setShowCustomization(!showCustomization)
+            setShowChat(false)
+            setShowSmartHome(false)
+            setShowHealthInsights(false)
+          }}
+          className={`p-3 rounded-xl border border-[var(--border)] transition-all duration-200 ${
+            showCustomization 
+              ? 'bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent-glow)]' 
+              : 'bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] text-[var(--fg)]'
+          }`}
+          title="Настройки"
+        >
+          <Settings size={20} />
+        </button>
+        
+        <button
+          onClick={() => {
             setShowSmartHome(!showSmartHome)
             setShowChat(false)
             setShowHealthInsights(false)
+            setShowCustomization(false)
           }}
           className={`p-3 rounded-xl border border-[var(--border)] transition-all duration-200 ${
             showSmartHome 
               ? 'bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent-glow)]' 
               : 'bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] text-[var(--fg)]'
           }`}
-          title="Smart Home Control"
+          title="Умный дом"
         >
           <Home size={20} />
         </button>
@@ -203,13 +232,14 @@ export default function ConversationPage() {
             setShowHealthInsights(!showHealthInsights)
             setShowChat(false)
             setShowSmartHome(false)
+            setShowCustomization(false)
           }}
           className={`p-3 rounded-xl border border-[var(--border)] transition-all duration-200 ${
             showHealthInsights 
               ? 'bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent-glow)]' 
               : 'bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] text-[var(--fg)]'
           }`}
-          title="Health & Insights"
+          title="Здоровье и аналитика"
         >
           <Activity size={20} />
         </button>
@@ -219,13 +249,14 @@ export default function ConversationPage() {
             setShowChat(!showChat)
             setShowSmartHome(false)
             setShowHealthInsights(false)
+            setShowCustomization(false)
           }}
           className={`p-3 rounded-xl border border-[var(--border)] transition-all duration-200 ${
             showChat 
               ? 'bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent-glow)]' 
               : 'bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] text-[var(--fg)]'
           }`}
-          title="Voice Chat"
+          title="Голосовой чат"
         >
           <MessageSquare size={20} />
         </button>
@@ -246,8 +277,14 @@ export default function ConversationPage() {
         onClose={() => setShowHealthInsights(false)} 
       />
 
+      {/* Customization Panel */}
+      <CustomizationPanel 
+        isVisible={showCustomization} 
+        onClose={() => setShowCustomization(false)} 
+      />
+
       {/* Main voice interface */}
-      {!showChat && !showSmartHome && !showHealthInsights && (
+      {!showChat && !showSmartHome && !showHealthInsights && !showCustomization && (
         <motion.div 
           className="flex items-center justify-center min-h-screen p-4"
           initial={{ opacity: 0 }}

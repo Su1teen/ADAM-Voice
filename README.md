@@ -1,10 +1,8 @@
-# Pulse - AI Conversation Interface
+# A.D.A.M. - Умный Голосовой Помощник
 
-A modern, interactive AI conversation interface built with Next.js, Neon and ElevenLabs. This application provides a seamless way to have voice conversations with an AI assistant and sync them in your serverless Postgres.
+Комплексный голосовой интерфейс для управления умным домом, построенный на Next.js и ElevenLabs. Это приложение обеспечивает бесшовные голосовые разговоры с ИИ-помощником, предлагая полное управление умным домом, мониторинг здоровья и возможности управления устройствами.
 
-<img src="https://github.com/user-attachments/assets/1267a85c-d35a-4779-8d7f-a07f4aa1ec7a" />
-
-## 🌟 Features
+## 🌟 Особенности
 
 - Real-time voice conversations with AI
 - Beautiful animated interface

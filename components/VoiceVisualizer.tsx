@@ -24,9 +24,9 @@ export default function VoiceVisualizer({ isListening, isSpeaking, onToggle }: V
   }, [isListening, isSpeaking])
 
   const getStatus = () => {
-    if (isSpeaking) return 'AI is speaking...'
-    if (isListening) return 'Listening...'
-    return 'Click to start voice conversation'
+    if (isSpeaking) return 'ИИ говорит...'
+    if (isListening) return 'Слушаю...'
+    return 'Нажмите для начала голосового разговора'
   }
 
   const getStatusColor = () => {
