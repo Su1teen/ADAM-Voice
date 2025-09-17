@@ -1,42 +1,65 @@
 'use client'
 
-import Message from '@/components/Message'
-import TextAnimation from '@/components/TextAnimation'
+import ChatContainer from '@/components/ChatContainer'
+import ChatInput from '@/components/ChatInput'
+import VoiceVisualizer from '@/components/VoiceVisualizer'
+import SmartHomeControl from '@/components/SmartHomeControl'
+import HealthInsights from '@/components/HealthInsights'
 import { type Role, useConversation } from '@11labs/react'
+import { motion } from 'framer-motion'
 import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-import { GitHub, X } from 'react-feather'
-import { toast } from 'sonner'
+import { MessageSquare, X, Home, Activity } from 'react-feather'
 
-export default function () {
+interface Message {
+  id: string
+  role: 'user' | 'assistant'
+  content: string
+  timestamp: number
+}
+
+export default function ConversationPage() {
   const { slug } = useParams()
-  const [currentText, setCurrentText] = useState('')
-  const [messages, setMessages] = useState<any[]>([])
-  const [isTranscriptOpen, setIsTranscriptOpen] = useState(false)
+  const [messages, setMessages] = useState<Message[]>([])
+  const [showChat, setShowChat] = useState(false)
+  const [showSmartHome, setShowSmartHome] = useState(false)
+  const [showHealthInsights, setShowHealthInsights] = useState(false)
+  const [isConnected, setIsConnected] = useState(false)
+
   const loadConversation = () => {
     fetch(`/api/c?id=${slug}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.length > 0) {
-          setMessages(
-            res.map((i: any) => ({
-              ...i,
-              formatted: {
-                text: i.content_transcript,
-                transcript: i.content_transcript,
-              },
-            })),
-          )
+          const formattedMessages: Message[] = res.map((item: any) => ({
+            id: item.id,
+            role: item.role === 'assistant' ? 'assistant' : 'user',
+            content: item.content_transcript,
+            timestamp: Date.now() - (res.length - item.created_at) * 1000,
+          }))
+          setMessages(formattedMessages)
         }
       })
+      .catch((error) => {
+        console.log('No conversation history found')
+        setMessages([])
+      })
   }
-  const conversation = useConversation({
-    onError: (error: string) => { toast(error) },
-    onConnect: () => { toast('Connected to ElevenLabs.') },
-    onMessage: (props: { message: string; source: Role }) => {
-      const { message, source } = props
-      if (source === 'ai') setCurrentText(message)
-      fetch('/api/c', {
+
+  const addMessage = (role: 'user' | 'assistant', content: string) => {
+    const newMessage: Message = {
+      id: 'msg_' + Date.now() + '_' + Math.random(),
+      role,
+      content,
+      timestamp: Date.now(),
+    }
+    setMessages(prev => [...prev, newMessage])
+    return newMessage
+  }
+
+  const saveMessage = async (message: Message) => {
+    try {
+      await fetch('/api/c', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -45,16 +68,39 @@ export default function () {
             type: 'message',
             status: 'completed',
             object: 'realtime.item',
-            id: 'item_' + Math.random(),
-            role: source === 'ai' ? 'assistant' : 'user',
-            content: [{ type: 'text', transcript: message }],
+            id: message.id,
+            role: message.role,
+            content: [{ type: 'text', transcript: message.content }],
           },
         }),
-      }).then(loadConversation)
+      })
+    } catch (error) {
+      console.error('Failed to save message:', error)
+    }
+  }
+
+  const conversation = useConversation({
+    onError: (error: string) => {
+      console.error('Connection error:', error)
+      setIsConnected(false)
+    },
+    onConnect: () => {
+      setIsConnected(true)
+    },
+    onDisconnect: () => {
+      setIsConnected(false)
+    },
+    onMessage: (props: { message: string; source: Role }) => {
+      const { message, source } = props
+      const role = source === 'ai' ? 'assistant' : 'user'
+      const newMessage = addMessage(role, message)
+      saveMessage(newMessage)
     },
   })
+
   const connectConversation = useCallback(async () => {
-    toast('Setting up ElevenLabs...')
+    if (isConnected) return
+    
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true })
       const response = await fetch('/api/i', {
@@ -62,74 +108,167 @@ export default function () {
         headers: { 'Content-Type': 'application/json' },
       })
       const data = await response.json()
-      if (data.error) return toast(data.error)
+      if (data.error) {
+        console.error('API Error:', data.error)
+        return
+      }
       await conversation.startSession({ signedUrl: data.apiKey })
     } catch (error) {
-      toast('Failed to set up ElevenLabs client :/')
+      console.error('Connection error:', error)
     }
-  }, [conversation])
+  }, [conversation, isConnected])
+
   const disconnectConversation = useCallback(async () => {
+    if (!isConnected) return
     await conversation.endSession()
-  }, [conversation])
-  const handleStartListening = () => {
-    if (conversation.status !== 'connected') connectConversation()
+    setIsConnected(false)
+  }, [conversation, isConnected])
+
+  const handleVoiceToggle = () => {
+    if (isConnected) {
+      disconnectConversation()
+    } else {
+      connectConversation()
+    }
   }
-  const handleStopListening = () => {
-    if (conversation.status === 'connected') disconnectConversation()
+
+  const handleSendMessage = async (messageContent: string) => {
+    // Add user message to chat immediately
+    const userMessage = addMessage('user', messageContent)
+    await saveMessage(userMessage)
+
+    try {
+      // Send message to text API for AI response
+      const response = await fetch('/api/text', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: messageContent }),
+      })
+      
+      const data = await response.json()
+      
+      if (data.response) {
+        const aiMessage = addMessage('assistant', data.response)
+        await saveMessage(aiMessage)
+      } else {
+        throw new Error(data.error || 'No response received')
+      }
+    } catch (error) {
+      console.error('Error sending message:', error)
+      const errorMessage = addMessage('assistant', 'Sorry, I encountered an error processing your message. Please try again.')
+      await saveMessage(errorMessage)
+    }
   }
+
+  useEffect(() => {
+    loadConversation()
+  }, [slug])
+
   useEffect(() => {
     return () => {
-      disconnectConversation()
+      if (isConnected) {
+        disconnectConversation()
+      }
     }
   }, [slug])
+
   return (
-    <>
-      <a target="_blank" href="https://github.com/neondatabase-labs/voice-thingy-with-elevenlabs-neon/" className="fixed bottom-2 right-2">
-        <GitHub />
-      </a>
-      <span className="fixed bottom-2 left-2">
-        Powered by{' '}
-        <a href="https://neon.tech/" className="underline" target="_blank">
-          Neon
-        </a>{' '}
-        and{' '}
-        <a href="https://elevenlabs.io/" className="underline" target="_blank">
-          ElevenLabs
-        </a>
-        .
-      </span>
-      <div className="fixed top-2 left-2 flex flex-row gap-x-2 items-center">
-        <a href="https://neon.tech" target="_blank">
-          <img loading="lazy" decoding="async" src="https://neon.tech/brand/neon-logo-light-color.svg" width="158" height="48" className="h-[30px] w-auto" alt="Neon Logo" />
-        </a>
-        <span className="text-gray-400">/</span>
-        <a href="/">
-          <span>Pulse</span>
-        </a>
+    <div className="min-h-screen bg-gradient-to-br from-[var(--bg)] via-[var(--bg-secondary)] to-[var(--bg)]">
+      {/* Background effects */}
+      <div className="fixed inset-0 opacity-30">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[var(--accent)] rounded-full filter blur-3xl opacity-20" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl opacity-20" />
       </div>
-      <TextAnimation currentText={currentText} isAudioPlaying={conversation.isSpeaking} onStopListening={handleStopListening} onStartListening={handleStartListening} />
-      {messages.length > 0 && (
-        <button className="text-sm fixed top-2 right-4 underline" onClick={() => setIsTranscriptOpen(!isTranscriptOpen)}>
-          Show Transcript
+
+      {/* Navigation buttons */}
+      <div className="fixed top-4 right-4 z-50 flex gap-2">
+        <button
+          onClick={() => {
+            setShowSmartHome(!showSmartHome)
+            setShowChat(false)
+            setShowHealthInsights(false)
+          }}
+          className={`p-3 rounded-xl border border-[var(--border)] transition-all duration-200 ${
+            showSmartHome 
+              ? 'bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent-glow)]' 
+              : 'bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] text-[var(--fg)]'
+          }`}
+          title="Smart Home Control"
+        >
+          <Home size={20} />
         </button>
+        
+        <button
+          onClick={() => {
+            setShowHealthInsights(!showHealthInsights)
+            setShowChat(false)
+            setShowSmartHome(false)
+          }}
+          className={`p-3 rounded-xl border border-[var(--border)] transition-all duration-200 ${
+            showHealthInsights 
+              ? 'bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent-glow)]' 
+              : 'bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] text-[var(--fg)]'
+          }`}
+          title="Health & Insights"
+        >
+          <Activity size={20} />
+        </button>
+        
+        <button
+          onClick={() => {
+            setShowChat(!showChat)
+            setShowSmartHome(false)
+            setShowHealthInsights(false)
+          }}
+          className={`p-3 rounded-xl border border-[var(--border)] transition-all duration-200 ${
+            showChat 
+              ? 'bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent-glow)]' 
+              : 'bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] text-[var(--fg)]'
+          }`}
+          title="Voice Chat"
+        >
+          <MessageSquare size={20} />
+        </button>
+      </div>
+
+      {/* Chat container */}
+      <ChatContainer messages={messages} isVisible={showChat} />
+
+      {/* Smart Home Control */}
+      <SmartHomeControl 
+        isVisible={showSmartHome} 
+        onClose={() => setShowSmartHome(false)} 
+      />
+
+      {/* Health Insights */}
+      <HealthInsights 
+        isVisible={showHealthInsights} 
+        onClose={() => setShowHealthInsights(false)} 
+      />
+
+      {/* Main voice interface */}
+      {!showChat && !showSmartHome && !showHealthInsights && (
+        <motion.div 
+          className="flex items-center justify-center min-h-screen p-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <VoiceVisualizer
+            isListening={conversation.status === 'connected' && !conversation.isSpeaking}
+            isSpeaking={conversation.isSpeaking}
+            onToggle={handleVoiceToggle}
+          />
+        </motion.div>
       )}
-      {isTranscriptOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white text-black p-4 rounded shadow-lg max-w-[90%] max-h-[90%] overflow-y-scroll">
-            <div className="flex flex-row items-center justify-between">
-              <span>Transcript</span>
-              <button onClick={() => setIsTranscriptOpen(false)}>
-                <X />
-              </button>
-            </div>
-            <div className="border-t py-4 mt-4 flex flex-col gap-y-4">
-              {messages.map((conversationItem) => (
-                <Message key={conversationItem.id} conversationItem={conversationItem} />
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+
+      {/* Chat input */}
+      <ChatInput
+        onSendMessage={handleSendMessage}
+        onVoiceToggle={handleVoiceToggle}
+        isListening={conversation.status === 'connected'}
+        disabled={false}
+      />
+    </div>
   )
 }

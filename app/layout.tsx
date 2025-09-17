@@ -10,8 +10,8 @@ const interFont = Inter({
 
 const config = {
   url: 'https://ai-pulse.vercel.app',
-  title: 'Voice led interactions with AI (powered by ElevenLabs)',
-  description: 'Voice led interactions with AI using Neon as the serverless database, and ElevenLabs as the Realtime conversation AI.',
+  title: 'Pulse - Voice AI Assistant',
+  description: 'Modern voice interactions with AI using ElevenLabs conversational AI technology.',
 }
 
 const btoa = (str: string) => Buffer.from(str).toString('base64')
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 export default function ({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${interFont.className} antialiased`}>
+      <body className={`${interFont.className} antialiased bg-[var(--bg)] text-[var(--fg)]`}>
         <Toaster />
         {children}
       </body>
