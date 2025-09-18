@@ -38,7 +38,7 @@ export default function ChatContainer({ messages, isVisible }: ChatContainerProp
             <div className="flex-shrink-0 mb-4">
               <div className="glass-panel p-4 pointer-events-auto">
                 <h2 className="text-lg font-semibold text-[var(--fg)] mb-1">
-                  Голосовой разговор
+                  Чат с вашим ИИ
                 </h2>
                 <p className="text-sm text-[var(--fg-secondary)]">
                   Общайтесь с вашим ИИ-помощником

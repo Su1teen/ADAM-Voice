@@ -191,14 +191,14 @@ export default function CustomizationPanel({ isVisible, onClose }: Customization
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="mobile-scroll-container absolute right-0 top-0 h-full w-full max-w-md glass-panel border-l shadow-2xl overflow-hidden"
+            className="mobile-scroll-container absolute right-0 top-0 h-full w-full max-w-md"
           >
+            <div className="h-full p-4">
+              <div className="h-full glass-panel border-l shadow-2xl overflow-hidden rounded-3xl">
             {/* Advanced Liquid Glass Header */}
             <div className="glass-surface flex items-center justify-between p-4 border-b border-[var(--border-glass)]">
               <div className="flex items-center gap-3">
-                <div className="glass-circle p-2 w-10 h-10 flex items-center justify-center">
-                  <Settings size={20} className="text-[var(--accent)]" />
-                </div>
+                <Settings size={24} className="text-[var(--accent)]" />
                 <h2 className="text-xl font-semibold text-[var(--fg)]">Настройки</h2>
               </div>
               <motion.button
@@ -572,6 +572,8 @@ export default function CustomizationPanel({ isVisible, onClose }: Customization
                   </div>
                 </div>
               )}
+            </div>
+          </div>
             </div>
           </motion.div>
         </motion.div>

@@ -55,7 +55,7 @@ export default function ChatInput({ onSendMessage, onVoiceToggle, isListening, d
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Напишите сообщение или используйте голос..."
+                  placeholder="Напишите сообщение..."
                   className="w-full bg-transparent text-[var(--fg)] placeholder-[var(--fg-muted)] resize-none outline-none min-h-[40px] sm:min-h-[48px] max-h-32 py-2.5 sm:py-3 px-0 text-sm sm:text-base"
                   disabled={disabled}
                   rows={1}

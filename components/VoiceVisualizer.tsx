@@ -61,9 +61,9 @@ export default function VoiceVisualizer({ isListening, isSpeaking, onToggle }: V
           isListening || isSpeaking ? 'animate-liquid-glow-advanced' : ''
         }`} />
         
-        {/* Main liquid glass circle with advanced effects */}
+        {/* Main liquid glass circle with clean edges */}
         <motion.div
-          className={`glass-circle liquid-distortion displacement-mask relative w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full flex items-center justify-center transition-all duration-500 ${
+          className={`glass-circle relative w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full flex items-center justify-center transition-all duration-500 overflow-hidden ${
             isListening || isSpeaking
               ? 'border-[var(--accent)] shadow-[var(--glow-strong)] animate-liquid-glow-advanced'
               : 'group-hover:border-[var(--border-strong)]'
@@ -142,9 +142,9 @@ export default function VoiceVisualizer({ isListening, isSpeaking, onToggle }: V
         )}
       </div>
 
-      {/* Advanced status text with displacement effects */}
+      {/* Clean status text with proper glass background */}
       <motion.div 
-        className="glass-panel-advanced displacement-mask blur-mask px-6 py-3 text-center rounded-2xl"
+        className="glass-panel px-6 py-3 text-center rounded-2xl"
         animate={{
           scale: isListening || isSpeaking ? 1.02 : 1
         }}

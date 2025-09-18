@@ -194,23 +194,25 @@ export default function SmartHomeControl({ isVisible, onClose }: SmartHomeContro
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="mobile-scroll-container absolute right-0 top-0 h-full w-full max-w-md glass-panel border-l shadow-2xl overflow-hidden"
+            className="mobile-scroll-container absolute right-0 top-0 bottom-0 w-full max-w-md"
           >
-            {/* Liquid Glass Header */}
-            <div className="glass-panel flex items-center justify-between p-4 border-b border-[var(--border-glass)]">
-              <div className="flex items-center gap-3">
-                <Home size={24} className="text-[var(--accent)]" />
-                <h2 className="text-xl font-semibold text-[var(--fg)]">Умный дом</h2>
+            <div className="h-full p-4">
+              <div className="h-full glass-panel border shadow-2xl overflow-hidden rounded-3xl">
+              {/* Liquid Glass Header */}
+              <div className="glass-surface flex items-center justify-between p-4 border-b border-[var(--border-glass)]">
+                <div className="flex items-center gap-3">
+                  <Home size={24} className="text-[var(--accent)]" />
+                  <h2 className="text-xl font-semibold text-[var(--fg)]">Умный дом</h2>
+                </div>
+                <motion.button
+                  onClick={onClose}
+                  className="glass-button p-2 transition-all duration-300"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <X size={20} />
+                </motion.button>
               </div>
-              <motion.button
-                onClick={onClose}
-                className="glass-button p-2 transition-all duration-300"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <X size={20} />
-              </motion.button>
-            </div>
 
             {/* Tabs */}
             <div className="flex border-b border-[var(--border)] bg-[var(--bg-secondary)]">
@@ -550,6 +552,8 @@ export default function SmartHomeControl({ isVisible, onClose }: SmartHomeContro
                   </div>
                 </div>
               )}
+            </div>
+              </div>
             </div>
           </motion.div>
         </motion.div>
