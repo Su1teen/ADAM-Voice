@@ -191,42 +191,55 @@ export default function CustomizationPanel({ isVisible, onClose }: Customization
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="absolute right-0 top-0 h-full w-full max-w-md bg-[var(--bg)] border-l border-[var(--border)] shadow-2xl overflow-hidden"
+            className="mobile-scroll-container absolute right-0 top-0 h-full w-full max-w-md glass-panel border-l shadow-2xl overflow-hidden"
           >
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-[var(--border)] bg-[var(--bg-secondary)]">
+            {/* Advanced Liquid Glass Header */}
+            <div className="glass-surface flex items-center justify-between p-4 border-b border-[var(--border-glass)]">
               <div className="flex items-center gap-3">
-                <Settings size={24} className="text-[var(--accent)]" />
+                <div className="glass-circle p-2 w-10 h-10 flex items-center justify-center">
+                  <Settings size={20} className="text-[var(--accent)]" />
+                </div>
                 <h2 className="text-xl font-semibold text-[var(--fg)]">Настройки</h2>
               </div>
-              <button
+              <motion.button
                 onClick={onClose}
-                className="p-2 rounded-xl hover:bg-[var(--bg-tertiary)] transition-colors"
+                className="glass-button p-2 transition-all duration-300"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
               >
                 <X size={20} />
-              </button>
+              </motion.button>
             </div>
 
-            {/* Tabs */}
-            <div className="flex border-b border-[var(--border)] bg-[var(--bg-secondary)] overflow-x-auto">
+            {/* Advanced Glass Tabs */}
+            <div className="glass-frosted flex border-b border-[var(--border-glass)] overflow-x-auto">
               {[
                 { id: 'devices', label: 'Устройства', icon: <Home size={14} /> },
                 { id: 'voice', label: 'Голос', icon: <Mic size={14} /> },
                 { id: 'automation', label: 'Правила', icon: <Clock size={14} /> },
                 { id: 'general', label: 'Общие', icon: <Settings size={14} /> }
               ].map((tab) => (
-                <button
+                <motion.button
                   key={tab.id}
                   onClick={() => setSelectedTab(tab.id as any)}
-                  className={`flex-1 p-3 flex items-center justify-center gap-1 transition-colors min-w-0 ${
+                  className={`flex-1 p-3 flex items-center justify-center gap-1 transition-all duration-300 min-w-0 relative ${
                     selectedTab === tab.id
-                      ? 'text-[var(--accent)] border-b-2 border-[var(--accent)]'
+                      ? 'text-[var(--accent)]'
                       : 'text-[var(--fg-secondary)] hover:text-[var(--fg)]'
                   }`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
+                  {selectedTab === tab.id && (
+                    <motion.div
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)]"
+                      layoutId="activeSettingsTab"
+                      transition={{ type: "spring", duration: 0.5 }}
+                    />
+                  )}
                   {tab.icon}
                   <span className="text-xs font-medium truncate">{tab.label}</span>
-                </button>
+                </motion.button>
               ))}
             </div>
 

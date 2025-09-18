@@ -160,42 +160,55 @@ export default function HealthInsights({ isVisible, onClose }: HealthInsightsPro
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="absolute right-0 top-0 h-full w-full max-w-md bg-[var(--bg)] border-l border-[var(--border)] shadow-2xl overflow-hidden"
+            className="mobile-scroll-container absolute right-0 top-0 h-full w-full max-w-md glass-panel border-l shadow-2xl overflow-hidden"
           >
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-[var(--border)] bg-[var(--bg-secondary)]">
+            {/* Advanced Liquid Glass Header */}
+            <div className="glass-surface flex items-center justify-between p-4 border-b border-[var(--border-glass)]">
               <div className="flex items-center gap-3">
-                <Activity size={24} className="text-[var(--accent)]" />
+                <div className="glass-circle p-2 w-10 h-10 flex items-center justify-center">
+                  <Activity size={20} className="text-[var(--accent)]" />
+                </div>
                 <h2 className="text-xl font-semibold text-[var(--fg)]">Здоровье и аналитика</h2>
               </div>
-              <button
+              <motion.button
                 onClick={onClose}
-                className="p-2 rounded-xl hover:bg-[var(--bg-tertiary)] transition-colors"
+                className="glass-button p-2 transition-all duration-300"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
               >
                 <X size={20} />
-              </button>
+              </motion.button>
             </div>
 
-            {/* Tabs */}
-            <div className="flex border-b border-[var(--border)] bg-[var(--bg-secondary)]">
+            {/* Advanced Glass Tabs */}
+            <div className="glass-frosted flex border-b border-[var(--border-glass)]">
               {[
                 { id: 'overview', label: 'Обзор', icon: <Activity size={16} /> },
                 { id: 'sleep', label: 'Сон', icon: <Moon size={16} /> },
                 { id: 'activity', label: 'Активность', icon: <Zap size={16} /> },
                 { id: 'stress', label: 'Самочувствие', icon: <Heart size={16} /> }
               ].map((tab) => (
-                <button
+                <motion.button
                   key={tab.id}
                   onClick={() => setSelectedTab(tab.id as any)}
-                  className={`flex-1 p-3 flex items-center justify-center gap-2 transition-colors ${
+                  className={`flex-1 p-3 flex items-center justify-center gap-2 transition-all duration-300 relative ${
                     selectedTab === tab.id
-                      ? 'text-[var(--accent)] border-b-2 border-[var(--accent)]'
+                      ? 'text-[var(--accent)]'
                       : 'text-[var(--fg-secondary)] hover:text-[var(--fg)]'
                   }`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
+                  {selectedTab === tab.id && (
+                    <motion.div
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)]"
+                      layoutId="activeTab"
+                      transition={{ type: "spring", duration: 0.5 }}
+                    />
+                  )}
                   {tab.icon}
                   <span className="text-sm font-medium">{tab.label}</span>
-                </button>
+                </motion.button>
               ))}
             </div>
 

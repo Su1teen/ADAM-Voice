@@ -45,6 +45,52 @@ export default function ({ children }: Readonly<{ children: React.ReactNode }>) 
   return (
     <html lang="en">
       <body className={`${interFont.className} antialiased bg-[var(--bg)] text-[var(--fg)]`}>
+        {/* SVG Filters for Liquid Glass Effects */}
+        <svg className="absolute w-0 h-0 pointer-events-none" aria-hidden="true">
+          <defs>
+            <filter id="liquid-filter" x="-20%" y="-20%" width="140%" height="140%">
+              <feTurbulence
+                baseFrequency="0.02 0.03"
+                numOctaves="3"
+                seed="1"
+                result="noise"
+              >
+                <animate
+                  attributeName="baseFrequency"
+                  values="0.02 0.03;0.03 0.02;0.02 0.03"
+                  dur="20s"
+                  repeatCount="indefinite"
+                />
+              </feTurbulence>
+              <feDisplacementMap
+                in="SourceGraphic"
+                in2="noise"
+                scale="3"
+                result="displacement"
+              />
+              <feGaussianBlur
+                in="displacement"
+                stdDeviation="0.5"
+                result="blur"
+              />
+              <feColorMatrix
+                in="blur"
+                type="matrix"
+                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
+                result="final"
+              />
+            </filter>
+            
+            <filter id="glow-filter" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+              <feMerge> 
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/> 
+              </feMerge>
+            </filter>
+          </defs>
+        </svg>
+        
         <Toaster />
         {children}
       </body>

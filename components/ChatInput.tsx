@@ -32,15 +32,15 @@ export default function ChatInput({ onSendMessage, onVoiceToggle, isListening, d
     <div className="fixed bottom-0 left-0 right-0 p-3 sm:p-4 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)] to-transparent z-40">
       <div className="max-w-4xl mx-auto">
         <form onSubmit={handleSubmit} className="relative">
-          <div className="glass-panel p-3 sm:p-4 shadow-2xl">
+          <div className="glass-panel-advanced displacement-mask p-3 sm:p-4 shadow-2xl">
             <div className="flex items-end gap-2 sm:gap-3">
               {/* Liquid Glass Voice Toggle Button */}
               <button
                 type="button"
                 onClick={onVoiceToggle}
-                className={`glass-button flex-shrink-0 p-2.5 sm:p-3 transition-all duration-300 ${
+                className={`glass-button morph-glass flex-shrink-0 p-2.5 sm:p-3 transition-all duration-300 ${
                   isListening
-                    ? 'bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] text-white animate-pulse-glass shadow-[var(--glow-glass)]'
+                    ? 'bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] text-white animate-pulse-glass-advanced shadow-[var(--glow-strong)]'
                     : 'text-[var(--fg-secondary)] hover:text-[var(--fg)]'
                 }`}
                 disabled={disabled}
@@ -70,9 +70,9 @@ export default function ChatInput({ onSendMessage, onVoiceToggle, isListening, d
               <button
                 type="submit"
                 disabled={!message.trim() || disabled}
-                className={`glass-button flex-shrink-0 p-2.5 sm:p-3 transition-all duration-300 ${
+                className={`glass-button morph-glass flex-shrink-0 p-2.5 sm:p-3 transition-all duration-300 ${
                   message.trim() && !disabled
-                    ? 'bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] text-white hover:shadow-[var(--glow-glass)] transform hover:scale-105'
+                    ? 'bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] text-white hover:shadow-[var(--glow-strong)] transform hover:scale-105'
                     : 'text-[var(--fg-muted)] cursor-not-allowed opacity-50'
                 }`}
                 title={!message.trim() ? 'Напишите сообщение для отправки' : 'Отправить сообщение'}
