@@ -184,82 +184,91 @@ export default function ConversationPage() {
   }, [slug])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[var(--bg)] via-[var(--bg-secondary)] to-[var(--bg)]">
-      {/* Background effects */}
-      <div className="fixed inset-0 opacity-30">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[var(--accent)] rounded-full filter blur-3xl opacity-20" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl opacity-20" />
+    <div className="mobile-scroll-container min-h-screen bg-gradient-to-br from-[var(--bg)] via-[var(--bg-secondary)] to-[var(--bg)]">
+      {/* Liquid Glass Background effects */}
+      <div className="fixed inset-0 opacity-20 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-[var(--accent)] to-blue-400 rounded-full filter blur-3xl animate-float-glass" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-purple-400 to-[var(--accent)] rounded-full filter blur-3xl animate-float-glass" style={{animationDelay: '2s'}} />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full filter blur-3xl animate-float-glass" style={{animationDelay: '4s'}} />
       </div>
 
-      {/* Navigation buttons */}
-      <div className="fixed top-4 right-4 z-50 flex gap-2">
-        <button
+      {/* Liquid Glass Navigation buttons */}
+      <div className="fixed top-4 right-4 z-50 flex gap-3">
+        <motion.button
           onClick={() => {
             setShowCustomization(!showCustomization)
             setShowChat(false)
             setShowSmartHome(false)
             setShowHealthInsights(false)
           }}
-          className={`p-3 rounded-xl border border-[var(--border)] transition-all duration-200 ${
+          className={`glass-button p-3 transition-all duration-300 ${
             showCustomization 
-              ? 'bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent-glow)]' 
-              : 'bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] text-[var(--fg)]'
+              ? 'bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] text-white shadow-[var(--glow-glass)]' 
+              : 'text-[var(--fg)]'
           }`}
           title="Настройки"
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.95 }}
         >
           <Settings size={20} />
-        </button>
+        </motion.button>
         
-        <button
+        <motion.button
           onClick={() => {
             setShowSmartHome(!showSmartHome)
             setShowChat(false)
             setShowHealthInsights(false)
             setShowCustomization(false)
           }}
-          className={`p-3 rounded-xl border border-[var(--border)] transition-all duration-200 ${
+          className={`glass-button p-3 transition-all duration-300 ${
             showSmartHome 
-              ? 'bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent-glow)]' 
-              : 'bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] text-[var(--fg)]'
+              ? 'bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] text-white shadow-[var(--glow-glass)]' 
+              : 'text-[var(--fg)]'
           }`}
           title="Умный дом"
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.95 }}
         >
           <Home size={20} />
-        </button>
+        </motion.button>
         
-        <button
+        <motion.button
           onClick={() => {
             setShowHealthInsights(!showHealthInsights)
             setShowChat(false)
             setShowSmartHome(false)
             setShowCustomization(false)
           }}
-          className={`p-3 rounded-xl border border-[var(--border)] transition-all duration-200 ${
+          className={`glass-button p-3 transition-all duration-300 ${
             showHealthInsights 
-              ? 'bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent-glow)]' 
-              : 'bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] text-[var(--fg)]'
+              ? 'bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] text-white shadow-[var(--glow-glass)]' 
+              : 'text-[var(--fg)]'
           }`}
           title="Здоровье и аналитика"
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.95 }}
         >
           <Activity size={20} />
-        </button>
+        </motion.button>
         
-        <button
+        <motion.button
           onClick={() => {
             setShowChat(!showChat)
             setShowSmartHome(false)
             setShowHealthInsights(false)
             setShowCustomization(false)
           }}
-          className={`p-3 rounded-xl border border-[var(--border)] transition-all duration-200 ${
+          className={`glass-button p-3 transition-all duration-300 ${
             showChat 
-              ? 'bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent-glow)]' 
-              : 'bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] text-[var(--fg)]'
+              ? 'bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] text-white shadow-[var(--glow-glass)]' 
+              : 'text-[var(--fg)]'
           }`}
           title="Голосовой чат"
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.95 }}
         >
           <MessageSquare size={20} />
-        </button>
+        </motion.button>
       </div>
 
       {/* Chat container */}

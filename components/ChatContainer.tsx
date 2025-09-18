@@ -34,9 +34,9 @@ export default function ChatContainer({ messages, isVisible }: ChatContainerProp
           className="fixed top-0 left-0 right-0 bottom-24 md:bottom-32 pointer-events-none"
         >
           <div className="h-full max-w-4xl mx-auto p-4 flex flex-col">
-            {/* Header */}
+            {/* Liquid Glass Header */}
             <div className="flex-shrink-0 mb-4">
-              <div className="bg-[var(--bg-secondary)]/80 backdrop-blur-xl border border-[var(--border)] rounded-2xl p-4 pointer-events-auto">
+              <div className="glass-panel p-4 pointer-events-auto">
                 <h2 className="text-lg font-semibold text-[var(--fg)] mb-1">
                   Голосовой разговор
                 </h2>
@@ -46,19 +46,22 @@ export default function ChatContainer({ messages, isVisible }: ChatContainerProp
               </div>
             </div>
 
-            {/* Messages container */}
+            {/* Liquid Glass Messages container */}
             <div 
               ref={scrollRef}
-              className="flex-1 overflow-y-auto pointer-events-auto bg-[var(--bg-secondary)]/60 backdrop-blur-xl border border-[var(--border)] rounded-2xl"
+              className="mobile-scroll-container flex-1 overflow-y-auto pointer-events-auto glass-panel"
               style={{ scrollbarWidth: 'thin' }}
             >
               {messages.length === 0 ? (
                 <div className="h-full flex items-center justify-center text-[var(--fg-muted)] text-center p-8">
                   <div>
-                    <div className="w-16 h-16 mx-auto mb-4 bg-[var(--bg-tertiary)] rounded-full flex items-center justify-center">
+                    <div className="glass-circle w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                       <motion.div
-                        className="w-8 h-8 bg-[var(--accent)] rounded-full"
-                        animate={{ scale: [1, 1.2, 1] }}
+                        className="w-8 h-8 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] rounded-full"
+                        animate={{ 
+                          scale: [1, 1.2, 1],
+                          opacity: [0.8, 1, 0.8]
+                        }}
                         transition={{ duration: 2, repeat: Infinity }}
                       />
                     </div>

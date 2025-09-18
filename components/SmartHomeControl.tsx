@@ -194,20 +194,22 @@ export default function SmartHomeControl({ isVisible, onClose }: SmartHomeContro
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="absolute right-0 top-0 h-full w-full max-w-md bg-[var(--bg)] border-l border-[var(--border)] shadow-2xl overflow-hidden"
+            className="mobile-scroll-container absolute right-0 top-0 h-full w-full max-w-md glass-panel border-l shadow-2xl overflow-hidden"
           >
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-[var(--border)] bg-[var(--bg-secondary)]">
+            {/* Liquid Glass Header */}
+            <div className="glass-panel flex items-center justify-between p-4 border-b border-[var(--border-glass)]">
               <div className="flex items-center gap-3">
                 <Home size={24} className="text-[var(--accent)]" />
                 <h2 className="text-xl font-semibold text-[var(--fg)]">Умный дом</h2>
               </div>
-              <button
+              <motion.button
                 onClick={onClose}
-                className="p-2 rounded-xl hover:bg-[var(--bg-tertiary)] transition-colors"
+                className="glass-button p-2 transition-all duration-300"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
               >
                 <X size={20} />
-              </button>
+              </motion.button>
             </div>
 
             {/* Tabs */}

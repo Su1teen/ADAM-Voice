@@ -32,16 +32,17 @@ export default function ChatInput({ onSendMessage, onVoiceToggle, isListening, d
     <div className="fixed bottom-0 left-0 right-0 p-3 sm:p-4 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)] to-transparent z-40">
       <div className="max-w-4xl mx-auto">
         <form onSubmit={handleSubmit} className="relative">
-          <div className="bg-[var(--bg-secondary)]/90 backdrop-blur-xl border border-[var(--border)] rounded-2xl p-3 sm:p-4 shadow-2xl">
+          <div className="glass-panel p-3 sm:p-4 shadow-2xl">
             <div className="flex items-end gap-2 sm:gap-3">
-              {/* Voice Toggle Button */}
+              {/* Liquid Glass Voice Toggle Button */}
               <button
                 type="button"
                 onClick={onVoiceToggle}
-                className={`flex-shrink-0 p-2.5 sm:p-3 rounded-xl transition-all duration-200 ${isListening
-                    ? 'bg-[var(--accent)] text-white animate-pulse-glow shadow-lg shadow-[var(--accent-glow)]'
-                    : 'bg-[var(--bg-tertiary)] hover:bg-[var(--border-light)] text-[var(--fg-secondary)] hover:text-[var(--fg)]'
-                  }`}
+                className={`glass-button flex-shrink-0 p-2.5 sm:p-3 transition-all duration-300 ${
+                  isListening
+                    ? 'bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] text-white animate-pulse-glass shadow-[var(--glow-glass)]'
+                    : 'text-[var(--fg-secondary)] hover:text-[var(--fg)]'
+                }`}
                 disabled={disabled}
                 title={isListening ? 'Остановить голосовой разговор' : 'Начать голосовой разговор'}
               >
@@ -65,14 +66,15 @@ export default function ChatInput({ onSendMessage, onVoiceToggle, isListening, d
                 />
               </div>
 
-              {/* Send Button */}
+              {/* Liquid Glass Send Button */}
               <button
                 type="submit"
                 disabled={!message.trim() || disabled}
-                className={`flex-shrink-0 p-2.5 sm:p-3 rounded-xl transition-all duration-200 ${message.trim() && !disabled
-                    ? 'bg-[var(--accent)] text-white hover:bg-[var(--accent-light)] hover:shadow-lg hover:shadow-[var(--accent-glow)] transform hover:scale-105'
-                    : 'bg-[var(--bg-tertiary)] text-[var(--fg-muted)] cursor-not-allowed'
-                  }`}
+                className={`glass-button flex-shrink-0 p-2.5 sm:p-3 transition-all duration-300 ${
+                  message.trim() && !disabled
+                    ? 'bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] text-white hover:shadow-[var(--glow-glass)] transform hover:scale-105'
+                    : 'text-[var(--fg-muted)] cursor-not-allowed opacity-50'
+                }`}
                 title={!message.trim() ? 'Напишите сообщение для отправки' : 'Отправить сообщение'}
               >
                 <Send size={18} className="sm:w-5 sm:h-5" />

@@ -20,6 +20,13 @@ const images = `https://neon.tech/docs/og?title=${btoa('A.D.A.M.')}&breadcrumb=$
 export const metadata: Metadata = {
   title: config.title,
   description: config.description,
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+    viewportFit: 'cover'
+  },
   openGraph: {
     images,
     url: config.url,
