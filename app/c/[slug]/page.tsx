@@ -184,43 +184,23 @@ export default function ConversationPage() {
   }, [slug])
 
   return (
-    <div className="mobile-scroll-container min-h-screen relative overflow-hidden">
-      {/* Advanced Liquid Glass Background */}
+    <div className="mobile-scroll-container min-h-screen relative overflow-hidden bg-[var(--bg-primary)]">
+      {/* Professional Apple Liquid Glass Background */}
       <div className="fixed inset-0 -z-10">
-        {/* Primary gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0f] via-[#0f0f1a] to-[#0a0a0f]" />
+        {/* Deep black gradient base */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#000000] via-[#0a0a0a] to-[#000000]" />
         
-        {/* Liquid Glass Orbs with Displacement Effects */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 opacity-20">
-          <div className="w-full h-full bg-gradient-to-r from-[var(--accent)] via-blue-400 to-cyan-400 rounded-full filter blur-3xl animate-liquid-flow" />
-          <div className="absolute inset-0 w-full h-full bg-gradient-to-l from-purple-400 via-[var(--accent)] to-blue-500 rounded-full filter blur-2xl animate-displacement-wave" style={{animationDelay: '2s'}} />
-        </div>
+        {/* Ultra-refined Liquid Glass Orbs (Apple Style) */}
+        <div className="liquid-orb liquid-orb-blue absolute top-[20%] left-[15%] w-[500px] h-[500px] animate-liquid-flow" />
+        <div className="liquid-orb liquid-orb-purple absolute bottom-[15%] right-[20%] w-[400px] h-[400px] animate-liquid-pulse" style={{animationDelay: '2s'}} />
+        <div className="liquid-orb liquid-orb-teal absolute top-[50%] left-[50%] w-[300px] h-[300px] animate-float-subtle" style={{animationDelay: '4s'}} />
         
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 opacity-15">
-          <div className="w-full h-full bg-gradient-to-r from-purple-400 via-[var(--accent)] to-pink-400 rounded-full filter blur-3xl animate-float-glass-advanced" />
-          <div className="absolute inset-4 w-4/5 h-4/5 bg-gradient-to-br from-cyan-300 to-blue-600 rounded-full filter blur-xl animate-displacement-wave" style={{animationDelay: '4s'}} />
-        </div>
-        
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 opacity-10">
-          <div className="w-full h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 rounded-full filter blur-3xl animate-float-glass-advanced" style={{animationDelay: '6s'}} />
-        </div>
-        
-        {/* Additional displacement layers */}
-        <div className="absolute top-3/4 left-1/6 w-48 h-48 opacity-12">
-          <div className="w-full h-full bg-gradient-to-br from-blue-300 via-[var(--accent)] to-purple-500 rounded-full filter blur-2xl animate-liquid-flow" style={{animationDelay: '3s'}} />
-        </div>
-        
-        <div className="absolute top-1/6 right-1/3 w-56 h-56 opacity-8">
-          <div className="w-full h-full bg-gradient-to-tl from-indigo-400 via-blue-400 to-cyan-300 rounded-full filter blur-3xl animate-displacement-wave" style={{animationDelay: '1s'}} />
-        </div>
-        
-        {/* Glass surface overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[rgba(255,255,255,0.01)] to-transparent" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,122,255,0.03)_0%,transparent_50%)]" />
+        {/* Subtle gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-radial from-transparent via-[rgba(10,132,255,0.02)] to-transparent" />
       </div>
 
-      {/* Liquid Glass Navigation buttons */}
-      <div className="fixed top-4 right-4 z-50 flex gap-3">
+      {/* Professional Navigation Buttons (Apple Style) */}
+      <div className="fixed top-6 right-6 z-50 flex gap-3">
         <motion.button
           onClick={() => {
             setShowCustomization(!showCustomization)
@@ -228,16 +208,16 @@ export default function ConversationPage() {
             setShowSmartHome(false)
             setShowHealthInsights(false)
           }}
-          className={`glass-button p-3 transition-all duration-300 ${
+          className={`glass-button p-3.5 transition-all duration-300 ${
             showCustomization 
-              ? 'bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] text-white shadow-[var(--glow-glass)]' 
-              : 'text-[var(--fg)]'
+              ? 'glass-button-accent shadow-apple-glow-blue' 
+              : ''
           }`}
-          title="Настройки"
+          title="Settings"
           whileHover={{ scale: 1.05, y: -2 }}
-          whileTap={{ scale: 0.95 }}
+          whileTap={{ scale: 0.96 }}
         >
-          <Settings size={20} />
+          <Settings size={20} strokeWidth={2} />
         </motion.button>
         
         <motion.button
@@ -247,16 +227,16 @@ export default function ConversationPage() {
             setShowHealthInsights(false)
             setShowCustomization(false)
           }}
-          className={`glass-button p-3 transition-all duration-300 ${
+          className={`glass-button p-3.5 transition-all duration-300 ${
             showSmartHome 
-              ? 'bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] text-white shadow-[var(--glow-glass)]' 
-              : 'text-[var(--fg)]'
+              ? 'glass-button-accent shadow-apple-glow-blue' 
+              : ''
           }`}
-          title="Умный дом"
+          title="Smart Home"
           whileHover={{ scale: 1.05, y: -2 }}
-          whileTap={{ scale: 0.95 }}
+          whileTap={{ scale: 0.96 }}
         >
-          <Home size={20} />
+          <Home size={20} strokeWidth={2} />
         </motion.button>
         
         <motion.button
@@ -266,16 +246,16 @@ export default function ConversationPage() {
             setShowSmartHome(false)
             setShowCustomization(false)
           }}
-          className={`glass-button p-3 transition-all duration-300 ${
+          className={`glass-button p-3.5 transition-all duration-300 ${
             showHealthInsights 
-              ? 'bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] text-white shadow-[var(--glow-glass)]' 
-              : 'text-[var(--fg)]'
+              ? 'glass-button-accent shadow-apple-glow-blue' 
+              : ''
           }`}
-          title="Здоровье и аналитика"
+          title="Health & Analytics"
           whileHover={{ scale: 1.05, y: -2 }}
-          whileTap={{ scale: 0.95 }}
+          whileTap={{ scale: 0.96 }}
         >
-          <Activity size={20} />
+          <Activity size={20} strokeWidth={2} />
         </motion.button>
         
         <motion.button
@@ -285,16 +265,16 @@ export default function ConversationPage() {
             setShowHealthInsights(false)
             setShowCustomization(false)
           }}
-          className={`glass-button p-3 transition-all duration-300 ${
+          className={`glass-button p-3.5 transition-all duration-300 ${
             showChat 
-              ? 'bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] text-white shadow-[var(--glow-glass)]' 
-              : 'text-[var(--fg)]'
+              ? 'glass-button-accent shadow-apple-glow-blue' 
+              : ''
           }`}
-          title="Голосовой чат"
+          title="Chat"
           whileHover={{ scale: 1.05, y: -2 }}
-          whileTap={{ scale: 0.95 }}
+          whileTap={{ scale: 0.96 }}
         >
-          <MessageSquare size={20} />
+          <MessageSquare size={20} strokeWidth={2} />
         </motion.button>
       </div>
 
@@ -323,9 +303,9 @@ export default function ConversationPage() {
       {!showChat && !showSmartHome && !showHealthInsights && !showCustomization && (
         <motion.div 
           className="flex items-center justify-center min-h-screen p-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
         >
           <VoiceVisualizer
             isListening={conversation.status === 'connected' && !conversation.isSpeaking}

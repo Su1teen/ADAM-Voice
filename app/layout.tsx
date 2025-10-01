@@ -10,8 +10,8 @@ const interFont = Inter({
 
 const config = {
   url: 'https://ai-pulse.vercel.app',
-  title: 'A.D.A.M. - Умный Голосовой Помощник',
-  description: 'Современные голосовые взаимодействия с ИИ для управления умным домом и мониторинга здоровья.',
+  title: 'A.D.A.M. - Advanced Digital Assistant Manager',
+  description: 'Professional voice-powered AI assistant for smart home automation and health monitoring with enterprise-grade liquid glass design.',
 }
 
 const btoa = (str: string) => Buffer.from(str).toString('base64')

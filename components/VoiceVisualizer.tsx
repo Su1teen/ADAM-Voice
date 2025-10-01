@@ -10,116 +10,112 @@ interface VoiceVisualizerProps {
 }
 
 export default function VoiceVisualizer({ isListening, isSpeaking, onToggle }: VoiceVisualizerProps) {
-  const [bars, setBars] = useState(Array(8).fill(0))
+  const [bars, setBars] = useState(Array(12).fill(0))
   const [ripples, setRipples] = useState<number[]>([])
 
   useEffect(() => {
     if (isListening || isSpeaking) {
       const interval = setInterval(() => {
-        setBars(Array(8).fill(0).map(() => Math.random() * 100))
-      }, 120)
+        setBars(Array(12).fill(0).map(() => Math.random() * 100))
+      }, 100)
       return () => clearInterval(interval)
     } else {
-      setBars(Array(8).fill(0))
+      setBars(Array(12).fill(0))
     }
   }, [isListening, isSpeaking])
 
   const handleClick = () => {
-    // Add ripple effect
     const newRipple = Date.now()
     setRipples(prev => [...prev, newRipple])
-    
-    // Remove ripple after animation
     setTimeout(() => {
       setRipples(prev => prev.filter(id => id !== newRipple))
-    }, 1000)
-    
+    }, 800)
     onToggle()
   }
 
   const getStatus = () => {
-    if (isSpeaking) return 'ИИ говорит...'
-    if (isListening) return 'Слушаю...'
-    return 'Нажмите для начала голосового разговора'
+    if (isSpeaking) return 'AI Speaking...'
+    if (isListening) return 'Listening...'
+    return 'Нажмите, чтобы начать голосовой разговор'
   }
 
   const getStatusColor = () => {
-    if (isSpeaking) return 'text-[var(--success)]'
-    if (isListening) return 'text-[var(--accent)]'
-    return 'text-[var(--fg-secondary)]'
+    if (isSpeaking) return 'text-apple-green'
+    if (isListening) return 'text-apple-blue'
+    return 'text-[var(--text-secondary)]'
   }
 
   return (
-    <div className="flex flex-col items-center gap-8">
-      {/* Liquid Glass Voice Visualizer */}
+    <div className="flex flex-col items-center gap-10">
+      {/* Professional Apple Voice Visualizer */}
       <div 
         className="relative cursor-pointer group"
         onClick={handleClick}
       >
-        {/* Ambient glow */}
-        <div className={`absolute inset-0 rounded-full transition-all duration-500 ${
-          isListening || isSpeaking ? 'animate-liquid-glow-advanced' : ''
-        }`} />
+        {/* Outer glow effect */}
+        {(isListening || isSpeaking) && (
+          <motion.div
+            className="absolute inset-[-20px] rounded-full"
+            style={{
+              background: `radial-gradient(circle, ${
+                isSpeaking ? 'rgba(48, 209, 88, 0.15)' : 'rgba(10, 132, 255, 0.15)'
+              } 0%, transparent 70%)`
+            }}
+            animate={{
+              scale: [1, 1.1, 1],
+              opacity: [0.5, 0.7, 0.5]
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+        )}
         
-        {/* Main liquid glass circle with clean edges */}
+        {/* Main liquid glass circle */}
         <motion.div
-          className={`glass-circle relative w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full flex items-center justify-center transition-all duration-500 overflow-hidden ${
-            isListening || isSpeaking
-              ? 'border-[var(--accent)] shadow-[var(--glow-strong)] animate-liquid-glow-advanced'
-              : 'group-hover:border-[var(--border-strong)]'
+          className={`glass-circle relative w-40 h-40 sm:w-48 sm:h-48 lg:w-56 lg:h-56 rounded-full flex items-center justify-center transition-all duration-500 ${
+            isListening || isSpeaking ? 'active' : ''
           }`}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          animate={isListening || isSpeaking ? {
-            boxShadow: [
-              '0 0 0 0px rgba(0, 122, 255, 0.4)',
-              '0 0 0 20px rgba(0, 122, 255, 0)',
-              '0 0 0 0px rgba(0, 122, 255, 0.4)'
-            ]
-          } : {}}
-          transition={{ duration: 2, repeat: Infinity }}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          transition={{ type: "spring", stiffness: 400, damping: 30 }}
         >
-          {/* Advanced liquid voice bars */}
+          {/* Professional voice bars (Apple style) */}
           <div className="flex items-center justify-center gap-1.5 relative z-10">
             {bars.map((height, index) => (
               <motion.div
                 key={index}
-                className={`w-1.5 rounded-full transition-all duration-300 ${
+                className={`w-1 rounded-full transition-colors duration-300 ${
                   isListening || isSpeaking 
-                    ? 'bg-gradient-to-t from-white via-blue-100 to-cyan-200 shadow-sm' 
-                    : 'bg-gradient-to-t from-[var(--fg-secondary)] to-[var(--fg-muted)]'
+                    ? isSpeaking
+                      ? 'bg-gradient-to-t from-apple-green/80 to-apple-green'
+                      : 'bg-gradient-to-t from-apple-blue/80 to-apple-blue'
+                    : 'bg-[var(--text-tertiary)]'
                 }`}
-                initial={{ height: 6 }}
+                initial={{ height: 4 }}
                 animate={{ 
                   height: isListening || isSpeaking 
-                    ? Math.max(6, height * 0.5) 
-                    : 6,
-                  opacity: isListening || isSpeaking ? 1 : 0.7,
-                  filter: isListening || isSpeaking 
-                    ? `blur(0px) saturate(1.2)` 
-                    : `blur(0px) saturate(1)`
+                    ? Math.max(4, height * 0.45) 
+                    : 4,
+                  opacity: isListening || isSpeaking ? 1 : 0.5
                 }}
                 transition={{ 
-                  duration: 0.15,
+                  duration: 0.12,
                   ease: "easeOut"
                 }}
               />
             ))}
           </div>
-          
-          {/* Advanced inner highlights with displacement */}
-          <div className="absolute inset-2 rounded-full bg-gradient-to-br from-white/15 via-white/5 to-transparent pointer-events-none" />
-          <div className="absolute inset-4 rounded-full bg-gradient-to-tr from-[var(--accent)]/10 via-transparent to-white/8 pointer-events-none" />
         </motion.div>
         
-        {/* Advanced ripple effects */}
+        {/* Ripple effects on tap */}
         {ripples.map((rippleId) => (
           <motion.div
             key={rippleId}
-            className="absolute inset-0 rounded-full border-2 border-[var(--accent)] pointer-events-none animate-ripple-glass-advanced"
-            initial={{ scale: 0.8, opacity: 1 }}
+            className={`absolute inset-0 rounded-full border ${
+              isSpeaking ? 'border-apple-green/40' : 'border-apple-blue/40'
+            } pointer-events-none`}
+            initial={{ scale: 1, opacity: 0.8 }}
             animate={{ scale: 2.5, opacity: 0 }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           />
         ))}
         
@@ -127,38 +123,69 @@ export default function VoiceVisualizer({ isListening, isSpeaking, onToggle }: V
         {(isListening || isSpeaking) && (
           <>
             <motion.div
-              className="absolute inset-0 rounded-full border border-[var(--accent)]/30"
-              initial={{ scale: 1, opacity: 0.6 }}
-              animate={{ scale: 1.8, opacity: 0 }}
+              className={`absolute inset-0 rounded-full border ${
+                isSpeaking ? 'border-apple-green/20' : 'border-apple-blue/20'
+              }`}
+              animate={{ scale: [1, 1.5], opacity: [0.6, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
             <motion.div
-              className="absolute inset-0 rounded-full border border-[var(--accent)]/20"
-              initial={{ scale: 1, opacity: 0.4 }}
-              animate={{ scale: 2.2, opacity: 0 }}
+              className={`absolute inset-0 rounded-full border ${
+                isSpeaking ? 'border-apple-green/15' : 'border-apple-blue/15'
+              }`}
+              animate={{ scale: [1, 1.8], opacity: [0.4, 0] }}
               transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
             />
           </>
         )}
       </div>
 
-      {/* Clean status text with proper glass background */}
+      {/* Professional status text */}
       <motion.div 
-        className="glass-panel px-6 py-3 text-center rounded-2xl"
+        className="glass-card px-8 py-4 text-center"
         animate={{
           scale: isListening || isSpeaking ? 1.02 : 1
         }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.3, type: "spring" }}
       >
-        <p className={`text-sm font-medium transition-colors duration-300 ${
-          isSpeaking 
-            ? 'text-[var(--success)]' 
-            : isListening 
-            ? 'text-[var(--accent)]' 
-            : 'text-[var(--fg-secondary)]'
-        }`}>
+        <motion.p 
+          className={`text-[15px] font-medium transition-colors duration-300 ${getStatusColor()}`}
+          animate={{
+            opacity: [1, 0.85, 1]
+          }}
+          transition={{ 
+            duration: isListening || isSpeaking ? 2 : 0, 
+            repeat: isListening || isSpeaking ? Infinity : 0
+          }}
+        >
           {getStatus()}
-        </p>
+        </motion.p>
+        {(isListening || isSpeaking) && (
+          <motion.div 
+            className="flex justify-center gap-1 mt-2"
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            {[0, 1, 2].map((i) => (
+              <motion.div
+                key={i}
+                className={`w-1.5 h-1.5 rounded-full ${
+                  isSpeaking ? 'bg-apple-green' : 'bg-apple-blue'
+                }`}
+                animate={{
+                  scale: [1, 1.3, 1],
+                  opacity: [0.5, 1, 0.5]
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  delay: i * 0.2
+                }}
+              />
+            ))}
+          </motion.div>
+        )}
       </motion.div>
     </div>
   )
