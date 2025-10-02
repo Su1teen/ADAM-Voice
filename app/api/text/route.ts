@@ -1,4 +1,8 @@
+export const runtime = 'edge'
+
 export const dynamic = 'force-dynamic'
+
+export const fetchCache = 'force-no-store'
 
 import { NextResponse } from 'next/server'
 
@@ -7,8 +11,8 @@ export async function POST(request: Request) {
   try {
     const { message } = await request.json()
     
-    if (!message) {
-      return NextResponse.json({ error: 'Missing message' }, { status: 400 })
+    if (!message || !process.env.XI_API_KEY) {
+      return NextResponse.json({ error: 'Missing message or API key' }, { status: 400 })
     }
 
     // For now, return a simple mock response

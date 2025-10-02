@@ -183,48 +183,39 @@ export default function SmartHomeControl({ isVisible, onClose }: SmartHomeContro
   return (
     <AnimatePresence>
       {isVisible && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
-            onClick={onClose}
-          />
-
-          {/* Smart Home Panel */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+        >
           <motion.div
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="fixed right-0 top-0 h-full w-full sm:w-[480px] lg:w-[560px] glass-panel rounded-l-3xl shadow-apple-xl z-50 flex flex-col"
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="mobile-scroll-container absolute right-0 top-0 bottom-0 w-full max-w-md"
           >
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-[var(--border-base)]">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-apple-green/20 to-apple-teal/20 flex items-center justify-center">
-                  <Home size={20} className="text-apple-green" />
+            <div className="h-full p-4">
+              <div className="h-full glass-panel border shadow-2xl overflow-hidden rounded-3xl">
+              {/* Liquid Glass Header */}
+              <div className="glass-surface flex items-center justify-between p-4 border-b border-[var(--border-glass)]">
+                <div className="flex items-center gap-3">
+                  <Home size={24} className="text-[var(--accent)]" />
+                  <h2 className="text-xl font-semibold text-[var(--fg)]">Умный дом</h2>
                 </div>
-                <div>
-                  <h2 className="text-lg font-semibold text-[var(--text-primary)]">Умный Дом</h2>
-                  <p className="text-xs text-[var(--text-tertiary)]">Управление устройствами и сценариями</p>
-                </div>
+                <motion.button
+                  onClick={onClose}
+                  className="glass-button p-2 transition-all duration-300"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <X size={20} />
+                </motion.button>
               </div>
-              <motion.button
-                onClick={onClose}
-                className="glass-button p-2 rounded-full"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <X size={20} />
-              </motion.button>
-            </div>
 
             {/* Tabs */}
-            <div className="flex gap-2 p-4 border-b border-[var(--border-base)] overflow-x-auto">
+            <div className="flex border-b border-[var(--border)] bg-[var(--bg-secondary)]">
               {[
                 { id: 'devices', label: 'Устройства', icon: <Home size={16} /> },
                 { id: 'energy', label: 'Энергия', icon: <Thermometer size={16} /> },
@@ -233,160 +224,156 @@ export default function SmartHomeControl({ isVisible, onClose }: SmartHomeContro
                 <button
                   key={tab.id}
                   onClick={() => setSelectedTab(tab.id as any)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                  className={`flex-1 p-3 flex items-center justify-center gap-2 transition-colors ${
                     selectedTab === tab.id
-                      ? 'glass-button-accent'
-                      : 'glass-button'
+                      ? 'text-[var(--accent)] border-b-2 border-[var(--accent)]'
+                      : 'text-[var(--fg-secondary)] hover:text-[var(--fg)]'
                   }`}
                 >
                   {tab.icon}
-                  {tab.label}
+                  <span className="text-sm font-medium">{tab.label}</span>
                 </button>
               ))}
             </div>
 
-            {/* Content */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+            <div className="h-full overflow-y-auto pb-20">
               {/* Devices Tab */}
               {selectedTab === 'devices' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="space-y-4"
-                >
+                <div>
                   {/* Quick Stats */}
-                  <div className="grid grid-cols-3 gap-3">
-                    <div className="glass-card p-3 text-center">
-                      <div className="text-2xl font-bold text-apple-blue mb-1">{rooms.reduce((acc, room) => acc + room.devices.filter(d => d.isOn).length, 0)}</div>
-                      <div className="text-xs text-[var(--text-tertiary)]">Активных</div>
-                    </div>
-                    <div className="glass-card p-3 text-center">
-                      <div className="text-2xl font-bold text-apple-green mb-1">{rooms.filter(r => r.isActive).length}</div>
-                      <div className="text-xs text-[var(--text-tertiary)]">Комнат</div>
-                    </div>
-                    <div className="glass-card p-3 text-center">
-                      <div className="text-2xl font-bold text-apple-orange mb-1">
-                        {Math.round(rooms.filter(r => r.temperature).reduce((acc, r) => acc + (r.temperature || 0), 0) / rooms.filter(r => r.temperature).length)}°C
+                  <div className="p-4 border-b border-[var(--border)]">
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="bg-[var(--bg-secondary)] rounded-xl p-3 text-center">
+                        <div className="text-2xl font-bold text-[var(--accent)]">{rooms.reduce((acc, room) => acc + room.devices.filter(d => d.isOn).length, 0)}</div>
+                        <div className="text-xs text-[var(--fg-secondary)]">Активных устройств</div>
                       </div>
-                      <div className="text-xs text-[var(--text-tertiary)]">Средн.</div>
+                      <div className="bg-[var(--bg-secondary)] rounded-xl p-3 text-center">
+                        <div className="text-2xl font-bold text-[var(--success)]">{rooms.filter(r => r.isActive).length}</div>
+                        <div className="text-xs text-[var(--fg-secondary)]">Активных комнат</div>
+                      </div>
+                      <div className="bg-[var(--bg-secondary)] rounded-xl p-3 text-center">
+                        <div className="text-2xl font-bold text-[var(--warning)]">
+                          {Math.round(rooms.filter(r => r.temperature).reduce((acc, r) => acc + (r.temperature || 0), 0) / rooms.filter(r => r.temperature).length)}°C
+                        </div>
+                        <div className="text-xs text-[var(--fg-secondary)]">Средн. темп.</div>
+                      </div>
                     </div>
                   </div>
 
                   {/* Recent Actions */}
-                  <div className="space-y-3">
-                    <h3 className="text-sm font-semibold text-[var(--text-primary)]">Последние Действия</h3>
-                    {recentActions.slice(0, 3).map((action, index) => (
-                      <div key={index} className="glass-card p-3">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                            action.type === 'security' ? 'bg-apple-red' :
-                            action.type === 'automation' ? 'bg-apple-green' :
-                            action.type === 'schedule' ? 'bg-apple-orange' :
-                            'bg-apple-blue'
-                          }`} />
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm text-[var(--text-primary)] truncate">{action.action}</div>
-                            <div className="text-xs text-[var(--text-tertiary)]">
-                              {action.room} • {action.time}
+                  <div className="p-4 border-b border-[var(--border)]">
+                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Последние действия</h3>
+                    <div className="space-y-2">
+                      {recentActions.slice(0, 3).map((action, index) => (
+                        <div key={index} className="bg-[var(--bg-secondary)] rounded-xl p-3">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-2 h-2 rounded-full ${
+                              action.type === 'security' ? 'bg-[var(--error)]' :
+                              action.type === 'automation' ? 'bg-[var(--success)]' :
+                              action.type === 'schedule' ? 'bg-[var(--warning)]' :
+                              'bg-[var(--accent)]'
+                            }`} />
+                            <div className="flex-1">
+                              <div className="text-sm text-[var(--fg)]">{action.action}</div>
+                              <div className="text-xs text-[var(--fg-muted)] mt-1">
+                                {action.room} • {action.time}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
 
                   {/* Rooms */}
-                  <div className="space-y-3">
-                    <h3 className="text-sm font-semibold text-[var(--text-primary)]">Комнаты</h3>
-                    {rooms.map((room, idx) => (
-                      <motion.div
-                        key={room.id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: idx * 0.05 }}
-                        className="glass-card overflow-hidden"
-                      >
-                        <button
-                          onClick={() => setSelectedRoom(selectedRoom === room.id ? null : room.id)}
-                          className="w-full p-4 flex items-center justify-between hover:bg-[var(--glass-light)] transition-colors"
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Комнаты</h3>
+                    <div className="space-y-3">
+                      {rooms.map((room) => (
+                        <motion.div
+                          key={room.id}
+                          className="bg-[var(--bg-secondary)] rounded-xl overflow-hidden"
+                          whileHover={{ scale: 1.02 }}
                         >
-                          <div className="flex items-center gap-3">
-                            <div className={`w-3 h-3 rounded-full ${room.isActive ? 'bg-apple-green' : 'bg-[var(--text-tertiary)]'}`} />
-                            <div className="text-left">
-                              <div className="font-medium text-[var(--text-primary)]">{room.name}</div>
-                              <div className="text-xs text-[var(--text-secondary)]">
-                                {room.devices.filter(d => d.isOn).length}/{room.devices.length} включено
-                                {room.temperature && ` • ${room.temperature}°C`}
+                          <button
+                            onClick={() => setSelectedRoom(selectedRoom === room.id ? null : room.id)}
+                            className="w-full p-4 flex items-center justify-between hover:bg-[var(--bg-tertiary)] transition-colors"
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className={`w-3 h-3 rounded-full ${room.isActive ? 'bg-[var(--success)]' : 'bg-[var(--fg-muted)]'}`} />
+                              <div>
+                                <div className="text-left font-medium text-[var(--fg)]">{room.name}</div>
+                                <div className="text-sm text-[var(--fg-secondary)]">
+                                  {room.devices.filter(d => d.isOn).length}/{room.devices.length} включено
+                                  {room.temperature && ` • ${room.temperature}°C`}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <ChevronRight 
-                            size={16} 
-                            className={`transform transition-transform text-[var(--text-tertiary)] ${selectedRoom === room.id ? 'rotate-90' : ''}`}
-                          />
-                        </button>
+                            <ChevronRight 
+                              size={16} 
+                              className={`transform transition-transform ${selectedRoom === room.id ? 'rotate-90' : ''}`}
+                            />
+                          </button>
 
-                        <AnimatePresence>
-                          {selectedRoom === room.id && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              className="border-t border-[var(--border-thin)]"
-                            >
-                              <div className="p-4 space-y-3 bg-[var(--glass-surface)]">
-                                {room.devices.map((device) => (
-                                  <div key={device.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-[var(--glass-light)] transition-colors">
-                                    <div className="flex items-center gap-3">
-                                      <div className={`p-2 rounded-lg ${device.isOn ? 'bg-apple-blue/20' : 'bg-[var(--glass-light)]'}`}>
-                                        {getDeviceIcon(device.type, 16)}
+                          <AnimatePresence>
+                            {selectedRoom === room.id && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                className="border-t border-[var(--border)]"
+                              >
+                                <div className="p-4 space-y-3">
+                                  {room.devices.map((device) => (
+                                    <div key={device.id} className="flex items-center justify-between">
+                                      <div className="flex items-center gap-3">
+                                        <div className={`p-2 rounded-lg ${device.isOn ? 'bg-[var(--accent)]' : 'bg-[var(--bg-tertiary)]'}`}>
+                                          {getDeviceIcon(device.type, 16)}
+                                        </div>
+                                        <div>
+                                          <div className="text-sm font-medium text-[var(--fg)]">{device.name}</div>
+                                          {device.value !== undefined && (
+                                            <div className="text-xs text-[var(--fg-secondary)]">
+                                              {device.type === 'light' ? `${device.value}%` : 
+                                               device.type === 'thermostat' ? `${device.value}°C` : 
+                                               device.value}
+                                            </div>
+                                          )}
+                                        </div>
                                       </div>
-                                      <div>
-                                        <div className="text-sm font-medium text-[var(--text-primary)]">{device.name}</div>
-                                        {device.value !== undefined && (
-                                          <div className="text-xs text-[var(--text-secondary)]">
-                                            {device.type === 'light' ? `${device.value}%` : 
-                                             device.type === 'thermostat' ? `${device.value}°C` : 
-                                             device.value}
-                                          </div>
+                                      <div className="flex items-center gap-2">
+                                        {device.type === 'light' && device.isOn && (
+                                          <input
+                                            type="range"
+                                            min="0"
+                                            max="100"
+                                            value={device.value as number || 0}
+                                            onChange={(e) => updateDeviceValue(device.id, parseInt(e.target.value))}
+                                            className="w-16 h-1 bg-[var(--bg-tertiary)] rounded-lg appearance-none cursor-pointer slider"
+                                          />
                                         )}
+                                        <button
+                                          onClick={() => toggleDevice(device.id)}
+                                          className={`w-12 h-6 rounded-full transition-colors relative ${
+                                            device.isOn ? 'bg-[var(--accent)]' : 'bg-[var(--bg-tertiary)]'
+                                          }`}
+                                        >
+                                          <div className={`w-5 h-5 rounded-full bg-white transition-transform absolute top-0.5 ${
+                                            device.isOn ? 'translate-x-6' : 'translate-x-0.5'
+                                          }`} />
+                                        </button>
                                       </div>
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                      {device.type === 'light' && device.isOn && (
-                                        <input
-                                          type="range"
-                                          min="0"
-                                          max="100"
-                                          value={device.value as number || 0}
-                                          onChange={(e) => updateDeviceValue(device.id, parseInt(e.target.value))}
-                                          className="w-16 h-1 rounded-lg appearance-none cursor-pointer"
-                                          style={{
-                                            background: `linear-gradient(to right, var(--accent-blue) 0%, var(--accent-blue) ${device.value}%, var(--glass-light) ${device.value}%, var(--glass-light) 100%)`
-                                          }}
-                                        />
-                                      )}
-                                      <button
-                                        onClick={() => toggleDevice(device.id)}
-                                        className={`w-12 h-6 rounded-full transition-colors relative ${
-                                          device.isOn ? 'bg-apple-blue' : 'bg-[var(--glass-light)]'
-                                        }`}
-                                      >
-                                        <div className={`w-5 h-5 rounded-full bg-white transition-transform absolute top-0.5 ${
-                                          device.isOn ? 'translate-x-6' : 'translate-x-0.5'
-                                        }`} />
-                                      </button>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </motion.div>
-                    ))}
+                                  ))}
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </motion.div>
+                      ))}
+                    </div>
                   </div>
-                </motion.div>
+                </div>
               )}
 
               {/* Energy Tab */}
@@ -566,8 +553,10 @@ export default function SmartHomeControl({ isVisible, onClose }: SmartHomeContro
                 </div>
               )}
             </div>
+              </div>
+            </div>
           </motion.div>
-        </>
+        </motion.div>
       )}
     </AnimatePresence>
   )

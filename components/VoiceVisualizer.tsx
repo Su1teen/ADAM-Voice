@@ -13,7 +13,6 @@ export default function VoiceVisualizer({ isListening, isSpeaking, onToggle }: V
   const [bars, setBars] = useState(Array(12).fill(0))
   const [ripples, setRipples] = useState<number[]>([])
 
-  
   useEffect(() => {
     if (isListening || isSpeaking) {
       const interval = setInterval(() => {
