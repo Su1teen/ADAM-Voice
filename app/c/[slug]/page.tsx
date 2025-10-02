@@ -1,8 +1,5 @@
 'use client'
 
-// Ensure this page is treated as dynamic
-export const dynamic = 'force-dynamic'
-
 import ChatContainer from '@/components/ChatContainer'
 import ChatInput from '@/components/ChatInput'
 import VoiceVisualizer from '@/components/VoiceVisualizer'
@@ -23,7 +20,7 @@ interface Message {
   timestamp: number
 }
 
-function ConversationPage() {
+export default function ConversationPage() {
   const params = useParams()
   const slug = typeof params.slug === 'string' ? params.slug : Array.isArray(params.slug) ? params.slug[0] : ''
   const [messages, setMessages] = useState<Message[]>([])
@@ -366,6 +363,3 @@ function ConversationPage() {
     </div>
   )
 }
-
-// Explicit named export for better RSC bundling
-export { ConversationPage as default }
