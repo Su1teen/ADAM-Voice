@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import { Toaster } from 'sonner'
 import './globals.css'
@@ -17,16 +17,17 @@ const config = {
 const btoa = (str: string) => Buffer.from(str).toString('base64')
 const images = `https://neon.tech/docs/og?title=${btoa('A.D.A.M.')}&breadcrumb=${btoa(config.title)}`
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover'
+}
+
 export const metadata: Metadata = {
   title: config.title,
   description: config.description,
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-    viewportFit: 'cover'
-  },
   openGraph: {
     images,
     url: config.url,
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
   },
 }
 
-export default function ({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body className={`${interFont.className} antialiased bg-[var(--bg)] text-[var(--fg)]`}>

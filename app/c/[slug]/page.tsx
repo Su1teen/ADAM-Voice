@@ -20,7 +20,7 @@ interface Message {
   timestamp: number
 }
 
-export default function ConversationPage() {
+function ConversationPage() {
   const { slug } = useParams()
   const [messages, setMessages] = useState<Message[]>([])
   const [showChat, setShowChat] = useState(false)
@@ -357,3 +357,5 @@ export default function ConversationPage() {
     </div>
   )
 }
+
+export default ConversationPage
