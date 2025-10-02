@@ -1,5 +1,8 @@
 'use client'
 
+// Ensure this page is treated as dynamic
+export const dynamic = 'force-dynamic'
+
 import ChatContainer from '@/components/ChatContainer'
 import ChatInput from '@/components/ChatInput'
 import VoiceVisualizer from '@/components/VoiceVisualizer'
