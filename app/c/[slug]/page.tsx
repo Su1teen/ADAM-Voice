@@ -23,7 +23,7 @@ interface Message {
   timestamp: number
 }
 
-export default function ConversationPage() {
+function ConversationPage() {
   const params = useParams()
   const slug = typeof params.slug === 'string' ? params.slug : Array.isArray(params.slug) ? params.slug[0] : ''
   const [messages, setMessages] = useState<Message[]>([])
@@ -366,3 +366,6 @@ export default function ConversationPage() {
     </div>
   )
 }
+
+// Explicit named export for better RSC bundling
+export { ConversationPage as default }
