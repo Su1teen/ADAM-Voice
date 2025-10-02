@@ -1,5 +1,6 @@
 'use client'
 
+import type { FC } from 'react'
 import ChatContainer from '@/components/ChatContainer'
 import ChatInput from '@/components/ChatInput'
 import VoiceVisualizer from '@/components/VoiceVisualizer'
@@ -20,7 +21,7 @@ interface Message {
   timestamp: number
 }
 
-function ConversationPage() {
+const ConversationPage: FC = () => {
   const { slug } = useParams()
   const [messages, setMessages] = useState<Message[]>([])
   const [showChat, setShowChat] = useState(false)
@@ -357,5 +358,7 @@ function ConversationPage() {
     </div>
   )
 }
+
+ConversationPage.displayName = 'ConversationPage'
 
 export default ConversationPage
