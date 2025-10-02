@@ -21,7 +21,8 @@ interface Message {
 }
 
 export default function ConversationPage() {
-  const { slug } = useParams()
+  const params = useParams()
+  const slug = typeof params.slug === 'string' ? params.slug : Array.isArray(params.slug) ? params.slug[0] : ''
   const [messages, setMessages] = useState<Message[]>([])
   const [showChat, setShowChat] = useState(false)
   const [showSmartHome, setShowSmartHome] = useState(false)
@@ -31,6 +32,7 @@ export default function ConversationPage() {
   const [isConnected, setIsConnected] = useState(false)
 
   const loadConversation = () => {
+    if (!slug) return
     fetch(`/api/c?id=${slug}`)
       .then((res) => res.json())
       .then((res) => {
@@ -62,6 +64,7 @@ export default function ConversationPage() {
   }
 
   const saveMessage = async (message: Message) => {
+    if (!slug) return
     try {
       await fetch('/api/c', {
         method: 'POST',
@@ -166,7 +169,10 @@ export default function ConversationPage() {
   }
 
   useEffect(() => {
-    loadConversation()
+    if (slug) {
+      loadConversation()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug])
 
   // Sync isConnected state with conversation status
