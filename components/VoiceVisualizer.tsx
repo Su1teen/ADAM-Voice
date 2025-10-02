@@ -34,8 +34,8 @@ export default function VoiceVisualizer({ isListening, isSpeaking, onToggle }: V
   }
 
   const getStatus = () => {
-    if (isSpeaking) return 'AI Speaking...'
-    if (isListening) return 'Listening...'
+    if (isSpeaking) return 'ИИ говорит...'
+    if (isListening) return 'Слушаю...'
     return 'Нажмите, чтобы начать голосовой разговор'
   }
 

@@ -4,13 +4,14 @@ import ChatContainer from '@/components/ChatContainer'
 import ChatInput from '@/components/ChatInput'
 import VoiceVisualizer from '@/components/VoiceVisualizer'
 import SmartHomeControl from '@/components/SmartHomeControl'
-import HealthInsights from '@/components/HealthInsights'
+import ProductivityHealth from '@/components/ProductivityHealth'
 import CustomizationPanel from '@/components/CustomizationPanel'
+import BuildingAutomation from '@/components/BuildingAutomation'
 import { type Role, useConversation } from '@11labs/react'
 import { motion } from 'framer-motion'
 import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-import { MessageSquare, X, Home, Activity, Settings } from 'react-feather'
+import { MessageSquare, X, Home, Activity, Settings, Layers } from 'react-feather'
 
 interface Message {
   id: string
@@ -26,6 +27,7 @@ export default function ConversationPage() {
   const [showSmartHome, setShowSmartHome] = useState(false)
   const [showHealthInsights, setShowHealthInsights] = useState(false)
   const [showCustomization, setShowCustomization] = useState(false)
+  const [showBuildingAutomation, setShowBuildingAutomation] = useState(false)
   const [isConnected, setIsConnected] = useState(false)
 
   const loadConversation = () => {
@@ -207,13 +209,14 @@ export default function ConversationPage() {
             setShowChat(false)
             setShowSmartHome(false)
             setShowHealthInsights(false)
+            setShowBuildingAutomation(false)
           }}
           className={`glass-button p-3.5 transition-all duration-300 ${
             showCustomization 
               ? 'glass-button-accent shadow-apple-glow-blue' 
               : ''
           }`}
-          title="Settings"
+          title="Настройки"
           whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.96 }}
         >
@@ -222,17 +225,38 @@ export default function ConversationPage() {
         
         <motion.button
           onClick={() => {
+            setShowBuildingAutomation(!showBuildingAutomation)
+            setShowChat(false)
+            setShowSmartHome(false)
+            setShowHealthInsights(false)
+            setShowCustomization(false)
+          }}
+          className={`glass-button p-3.5 transition-all duration-300 ${
+            showBuildingAutomation 
+              ? 'glass-button-accent shadow-apple-glow-blue' 
+              : ''
+          }`}
+          title="Автоматизация Здания"
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.96 }}
+        >
+          <Layers size={20} strokeWidth={2} />
+        </motion.button>
+        
+        <motion.button
+          onClick={() => {
             setShowSmartHome(!showSmartHome)
             setShowChat(false)
             setShowHealthInsights(false)
             setShowCustomization(false)
+            setShowBuildingAutomation(false)
           }}
           className={`glass-button p-3.5 transition-all duration-300 ${
             showSmartHome 
               ? 'glass-button-accent shadow-apple-glow-blue' 
               : ''
           }`}
-          title="Smart Home"
+          title="Умный Дом"
           whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.96 }}
         >
@@ -245,13 +269,14 @@ export default function ConversationPage() {
             setShowChat(false)
             setShowSmartHome(false)
             setShowCustomization(false)
+            setShowBuildingAutomation(false)
           }}
           className={`glass-button p-3.5 transition-all duration-300 ${
             showHealthInsights 
               ? 'glass-button-accent shadow-apple-glow-blue' 
               : ''
           }`}
-          title="Health & Analytics"
+          title="Продуктивность"
           whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.96 }}
         >
@@ -264,13 +289,14 @@ export default function ConversationPage() {
             setShowSmartHome(false)
             setShowHealthInsights(false)
             setShowCustomization(false)
+            setShowBuildingAutomation(false)
           }}
           className={`glass-button p-3.5 transition-all duration-300 ${
             showChat 
               ? 'glass-button-accent shadow-apple-glow-blue' 
               : ''
           }`}
-          title="Chat"
+          title="Чат с ИИ"
           whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.96 }}
         >
@@ -281,14 +307,20 @@ export default function ConversationPage() {
       {/* Chat container */}
       <ChatContainer messages={messages} isVisible={showChat} />
 
+      {/* Building Automation */}
+      <BuildingAutomation 
+        isVisible={showBuildingAutomation} 
+        onClose={() => setShowBuildingAutomation(false)} 
+      />
+
       {/* Smart Home Control */}
       <SmartHomeControl 
         isVisible={showSmartHome} 
         onClose={() => setShowSmartHome(false)} 
       />
 
-      {/* Health Insights */}
-      <HealthInsights 
+      {/* Productivity & Health */}
+      <ProductivityHealth 
         isVisible={showHealthInsights} 
         onClose={() => setShowHealthInsights(false)} 
       />
@@ -300,7 +332,7 @@ export default function ConversationPage() {
       />
 
       {/* Main voice interface */}
-      {!showChat && !showSmartHome && !showHealthInsights && !showCustomization && (
+      {!showChat && !showSmartHome && !showHealthInsights && !showCustomization && !showBuildingAutomation && (
         <motion.div 
           className="flex items-center justify-center min-h-screen p-4"
           initial={{ opacity: 0, scale: 0.95 }}
