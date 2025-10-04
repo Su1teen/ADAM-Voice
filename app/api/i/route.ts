@@ -5,17 +5,18 @@ export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
 
 import { NextResponse } from 'next/server'
+import { elevenLabsConfig } from '@/elevenlabs-config'
 
 export async function POST(request: Request) {
-  let agentId = process.env.AGENT_ID
-  let apiKey = process.env.XI_API_KEY
+  let agentId = elevenLabsConfig.agentId
+  let apiKey = elevenLabsConfig.apiKey
   try {
     const body = await request.json()
     if (body.apiKey) apiKey = body.apiKey
     if (body.agentId) agentId = body.agentId
   } catch (e) {}
-  if (!agentId) throw Error('AGENT_ID is not set or received.')
-  if (!apiKey) throw Error('XI_API_KEY is not set or received.')
+  if (!agentId) throw Error('ELEVENLABS_AGENT_ID is not set or received.')
+  if (!apiKey) throw Error('ELEVENLABS_API_KEY is not set or received.')
   try {
     const apiUrl = new URL('https://api.elevenlabs.io/v1/convai/conversation/get_signed_url')
     apiUrl.searchParams.set('agent_id', agentId)

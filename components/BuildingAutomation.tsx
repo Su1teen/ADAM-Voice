@@ -425,11 +425,11 @@ export default function BuildingAutomation({ isVisible, onClose }: BuildingAutom
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <div className="text-xs text-[var(--text-tertiary)] mb-1">За месяц</div>
-                        <div className="text-2xl font-bold text-apple-green">₽24,580</div>
+                        <div className="text-2xl font-bold text-apple-green">124,580</div>
                       </div>
                       <div>
                         <div className="text-xs text-[var(--text-tertiary)] mb-1">За год (прогноз)</div>
-                        <div className="text-2xl font-bold text-apple-green">₽294,960</div>
+                        <div className="text-2xl font-bold text-apple-green">914,960</div>
                       </div>
                     </div>
                   </div>

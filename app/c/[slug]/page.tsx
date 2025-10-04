@@ -105,7 +105,6 @@ const ConversationPage: FC = () => {
 
   const connectConversation = useCallback(async () => {
     if (isConnected) return
-    
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true })
       const response = await fetch('/api/i', {
@@ -117,7 +116,11 @@ const ConversationPage: FC = () => {
         console.error('API Error:', data.error)
         return
       }
-      await conversation.startSession({ signedUrl: data.apiKey })
+      const signedUrl = data.apiKey ?? data.signed_url
+      if (!signedUrl) {
+        throw new Error('Missing signed URL from ElevenLabs response')
+      }
+      await conversation.startSession({ signedUrl })
     } catch (error) {
       console.error('Connection error:', error)
     }

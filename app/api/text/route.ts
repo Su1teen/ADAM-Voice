@@ -5,13 +5,14 @@ export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
 
 import { NextResponse } from 'next/server'
+import { elevenLabsConfig } from '@/elevenlabs-config'
 
 // Simple text-to-speech via ElevenLabs text API
 export async function POST(request: Request) {
   try {
     const { message } = await request.json()
     
-    if (!message || !process.env.XI_API_KEY) {
+    if (!message || !elevenLabsConfig.apiKey) {
       return NextResponse.json({ error: 'Missing message or API key' }, { status: 400 })
     }
 
