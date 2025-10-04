@@ -3,7 +3,6 @@ import type { NextConfig } from 'next'
 const allowedBots = '.*(bot|telegram|baidu|bing|yandex|iframely|whatsapp|facebook).*'
 
 export default {
-  output: 'standalone',
   experimental: {
     optimizePackageImports: ['framer-motion', 'react-feather'],
   },
