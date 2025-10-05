@@ -7,6 +7,23 @@ export default {
     optimizePackageImports: ['framer-motion', 'react-feather'],
   },
   transpilePackages: ['@11labs/react'],
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+        ],
+      },
+    ]
+  },
   async rewrites() {
     return [
       {
