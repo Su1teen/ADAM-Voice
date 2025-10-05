@@ -386,7 +386,7 @@ export default function ProductivityHealth({ isVisible, onClose }: ProductivityH
             </div>
 
             {/* Tabs */}
-            <div className="flex gap-2 p-4 border-b border-[var(--border-base)] overflow-x-auto">
+            <div className="flex gap-2 p-4 border-b border-[var(--border-base)] overflow-x-auto scrollbar-hide">
               {[
                 { id: 'overview', label: 'Обзор', icon: <Target size={16} /> },
                 { id: 'tasks', label: 'Задачи', icon: <CheckCircle size={16} /> },
@@ -396,14 +396,14 @@ export default function ProductivityHealth({ isVisible, onClose }: ProductivityH
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                  className={`flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                     activeTab === tab.id
                       ? 'glass-button-accent'
                       : 'glass-button'
                   }`}
                 >
                   {tab.icon}
-                  {tab.label}
+                  <span>{tab.label}</span>
                 </button>
               ))}
             </div>

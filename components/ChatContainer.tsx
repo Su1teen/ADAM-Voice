@@ -31,9 +31,9 @@ export default function ChatContainer({ messages, isVisible }: ChatContainerProp
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.3 }}
-          className="fixed top-0 left-0 right-0 bottom-24 md:bottom-32 pointer-events-none"
+          className="fixed top-0 left-0 right-0 bottom-24 md:bottom-32 pointer-events-none z-30"
         >
-          <div className="h-full max-w-4xl mx-auto p-4 flex flex-col">
+          <div className="h-full max-w-4xl mx-auto p-4 pt-20 md:pt-4 flex flex-col">
             {/* Liquid Glass Header */}
             <div className="flex-shrink-0 mb-4">
               <div className="glass-panel p-4 pointer-events-auto">

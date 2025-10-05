@@ -73,10 +73,8 @@ export default function BuildingAutomation({ isVisible, onClose }: BuildingAutom
   const [zones, setZones] = useState<BuildingZone[]>([
     { id: '1', name: 'Офис А - Этаж 1', floor: 1, temperature: 22.5, humidity: 45, occupancy: 12, lighting: 80, hvacStatus: 'auto', powerUsage: 45.2 },
     { id: '2', name: 'Офис Б - Этаж 1', floor: 1, temperature: 23.0, humidity: 48, occupancy: 8, lighting: 65, hvacStatus: 'on', powerUsage: 38.7 },
-    { id: '3', name: 'Конференц-зал - Этаж 2', floor: 2, temperature: 21.8, humidity: 42, occupancy: 0, lighting: 20, hvacStatus: 'auto', powerUsage: 12.5 },
-    { id: '4', name: 'Офис В - Этаж 2', floor: 2, temperature: 22.2, humidity: 46, occupancy: 15, lighting: 90, hvacStatus: 'auto', powerUsage: 52.8 },
-    { id: '5', name: 'Серверная - Подвал', floor: 0, temperature: 18.5, humidity: 40, occupancy: 2, lighting: 100, hvacStatus: 'on', powerUsage: 95.6 },
-    { id: '6', name: 'Холл - Этаж 1', floor: 1, temperature: 21.5, humidity: 44, occupancy: 5, lighting: 70, hvacStatus: 'auto', powerUsage: 28.3 }
+    { id: '3', name: 'Конференц-зал - Этаж 1', floor: 1, temperature: 21.8, humidity: 42, occupancy: 0, lighting: 20, hvacStatus: 'auto', powerUsage: 12.5 },
+    { id: '4', name: 'Офис В - Этаж 1', floor: 1, temperature: 22.2, humidity: 46, occupancy: 15, lighting: 90, hvacStatus: 'auto', powerUsage: 52.8 }
   ])
 
   // Automation rules
@@ -171,7 +169,7 @@ export default function BuildingAutomation({ isVisible, onClose }: BuildingAutom
             </div>
 
             {/* Tabs */}
-            <div className="flex gap-2 p-4 border-b border-[var(--border-base)] overflow-x-auto">
+            <div className="flex gap-2 p-4 border-b border-[var(--border-base)] overflow-x-auto scrollbar-hide">
               {[
                 { id: 'overview', label: 'Обзор' },
                 { id: 'zones', label: 'Зоны' },
@@ -181,7 +179,7 @@ export default function BuildingAutomation({ isVisible, onClose }: BuildingAutom
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                  className={`flex-shrink-0 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                     activeTab === tab.id
                       ? 'glass-button-accent'
                       : 'glass-button'
@@ -206,30 +204,30 @@ export default function BuildingAutomation({ isVisible, onClose }: BuildingAutom
                     {Object.entries(resources).map(([key, data]) => (
                       <motion.div
                         key={key}
-                        className="glass-card p-4"
+                        className="glass-card p-3 sm:p-4"
                         whileHover={{ scale: 1.02 }}
                       >
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className={`${getStatusColor(data.status)}`}>
+                        <div className="flex items-center gap-2 mb-2 sm:mb-3">
+                          <div className={`${getStatusColor(data.status)} flex-shrink-0`}>
                             {getResourceIcon(key)}
                           </div>
-                          <span className="text-xs font-medium text-[var(--text-secondary)] uppercase">
-                            {key === 'power' && 'Электричество'}
+                          <span className="text-[10px] sm:text-xs font-medium text-[var(--text-secondary)] uppercase leading-tight truncate">
+                            {key === 'power' && 'Электр-во'}
                             {key === 'water' && 'Вода'}
                             {key === 'gas' && 'Газ'}
-                            {key === 'hvac' && 'Кондиционирование'}
+                            {key === 'hvac' && 'Кондиц-е'}
                           </span>
                         </div>
                         <div className="flex items-end justify-between">
-                          <div>
-                            <div className="text-2xl font-semibold text-[var(--text-primary)]">
+                          <div className="min-w-0 flex-1">
+                            <div className="text-xl sm:text-2xl font-semibold text-[var(--text-primary)] truncate">
                               {data.current}
                             </div>
-                            <div className="text-xs text-[var(--text-tertiary)]">
+                            <div className="text-xs text-[var(--text-tertiary)] truncate">
                               {data.unit}
                             </div>
                           </div>
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-1 flex-shrink-0 ml-2">
                             {getTrendIcon(data.trend)}
                           </div>
                         </div>
@@ -425,11 +423,11 @@ export default function BuildingAutomation({ isVisible, onClose }: BuildingAutom
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <div className="text-xs text-[var(--text-tertiary)] mb-1">За месяц</div>
-                        <div className="text-2xl font-bold text-apple-green">124,580</div>
+                        <div className="text-2xl font-bold text-apple-green">124,580 тг</div>
                       </div>
                       <div>
                         <div className="text-xs text-[var(--text-tertiary)] mb-1">За год (прогноз)</div>
-                        <div className="text-2xl font-bold text-apple-green">914,960</div>
+                        <div className="text-2xl font-bold text-apple-green">914,960 тг</div>
                       </div>
                     </div>
                   </div>
