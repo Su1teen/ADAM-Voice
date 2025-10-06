@@ -129,23 +129,33 @@ export default function BuildingAutomation({ isVisible, onClose }: BuildingAutom
     <AnimatePresence>
       {isVisible && (
         <>
-          {/* Backdrop */}
+          {/* Optimized Backdrop - no blur on mobile */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black/70 z-40"
             onClick={onClose}
+            style={{ willChange: 'opacity' }}
           />
 
-          {/* Building Automation Panel */}
+          {/* Optimized Building Automation Panel */}
           <motion.div
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            transition={{ 
+              type: 'tween',
+              duration: 0.3,
+              ease: [0.32, 0.72, 0, 1]
+            }}
             className="fixed right-0 top-0 h-full w-full sm:w-[480px] lg:w-[560px] glass-panel rounded-l-3xl shadow-apple-xl z-50 flex flex-col"
+            style={{ 
+              willChange: 'transform',
+              backfaceVisibility: 'hidden',
+              transform: 'translateZ(0)'
+            }}
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-[var(--border-base)]">
@@ -194,18 +204,13 @@ export default function BuildingAutomation({ isVisible, onClose }: BuildingAutom
             <div className="flex-1 overflow-y-auto p-6 space-y-4">
               {/* Overview Tab */}
               {activeTab === 'overview' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="space-y-4"
-                >
+                <div className="space-y-4">
                   {/* Resource Cards */}
                   <div className="grid grid-cols-2 gap-3">
                     {Object.entries(resources).map(([key, data]) => (
-                      <motion.div
+                      <div
                         key={key}
-                        className="glass-card p-3 sm:p-4"
-                        whileHover={{ scale: 1.02 }}
+                        className="glass-card p-3 sm:p-4 transition-transform active:scale-95"
                       >
                         <div className="flex items-center gap-2 mb-2 sm:mb-3">
                           <div className={`${getStatusColor(data.status)} flex-shrink-0`}>
@@ -237,7 +242,7 @@ export default function BuildingAutomation({ isVisible, onClose }: BuildingAutom
                             <span className="text-apple-green font-medium">↓ {data.savings}%</span>
                           </div>
                         </div>
-                      </motion.div>
+                      </div>
                     ))}
                   </div>
 
@@ -293,21 +298,16 @@ export default function BuildingAutomation({ isVisible, onClose }: BuildingAutom
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               )}
 
               {/* Zones Tab */}
               {activeTab === 'zones' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="space-y-3"
-                >
+                <div className="space-y-3">
                   {zones.map((zone) => (
-                    <motion.div
+                    <div
                       key={zone.id}
-                      className="glass-card p-4"
-                      whileHover={{ scale: 1.01 }}
+                      className="glass-card p-4 transition-transform active:scale-95"
                     >
                       <div className="flex items-center justify-between mb-3">
                         <div>
@@ -352,18 +352,14 @@ export default function BuildingAutomation({ isVisible, onClose }: BuildingAutom
                         <span className="text-xs text-[var(--text-tertiary)]">Потребление</span>
                         <span className="text-sm font-semibold text-[var(--text-primary)]">{zone.powerUsage} кВт</span>
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
-                </motion.div>
+                </div>
               )}
 
               {/* Energy Tab */}
               {activeTab === 'energy' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="space-y-4"
-                >
+                <div className="space-y-4">
                   {/* Energy Overview */}
                   <div className="glass-card p-5">
                     <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Энергопотребление Сегодня</h3>
@@ -450,16 +446,12 @@ export default function BuildingAutomation({ isVisible, onClose }: BuildingAutom
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               )}
 
               {/* Automation Tab */}
               {activeTab === 'automation' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="space-y-3"
-                >
+                <div className="space-y-3">
                   <div className="glass-card p-4 bg-gradient-to-br from-apple-blue/10 to-transparent border-apple-blue/20 mb-4">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-full bg-apple-blue/20 flex items-center justify-center flex-shrink-0">
@@ -477,10 +469,9 @@ export default function BuildingAutomation({ isVisible, onClose }: BuildingAutom
                   </div>
 
                   {automationRules.map((rule) => (
-                    <motion.div
+                    <div
                       key={rule.id}
-                      className="glass-card p-4"
-                      whileHover={{ scale: 1.01 }}
+                      className="glass-card p-4 transition-transform active:scale-95"
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
@@ -509,13 +500,13 @@ export default function BuildingAutomation({ isVisible, onClose }: BuildingAutom
                         </div>
                         <span className="text-xs font-semibold text-apple-green">{rule.savings}</span>
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
 
                   <button className="w-full glass-button py-3 text-sm font-medium mt-4">
                     + Добавить Правило
                   </button>
-                </motion.div>
+                </div>
               )}
             </div>
           </motion.div>

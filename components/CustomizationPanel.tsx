@@ -184,14 +184,25 @@ export default function CustomizationPanel({ isVisible, onClose }: Customization
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 z-50 bg-black/70"
+          style={{ willChange: 'opacity' }}
         >
           <motion.div
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            transition={{ 
+              type: 'tween',
+              duration: 0.3,
+              ease: [0.32, 0.72, 0, 1]
+            }}
             className="mobile-scroll-container absolute right-0 top-0 h-full w-full max-w-md"
+            style={{ 
+              willChange: 'transform',
+              backfaceVisibility: 'hidden',
+              transform: 'translateZ(0)'
+            }}
           >
             <div className="h-full p-4">
               <div className="h-full glass-panel border-l shadow-2xl overflow-hidden rounded-3xl">

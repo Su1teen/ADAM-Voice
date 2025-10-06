@@ -346,23 +346,33 @@ export default function ProductivityHealth({ isVisible, onClose }: ProductivityH
     <AnimatePresence>
       {isVisible && (
         <>
-          {/* Backdrop */}
+          {/* Optimized Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black/70 z-40"
             onClick={onClose}
+            style={{ willChange: 'opacity' }}
           />
 
-          {/* Productivity & Health Panel */}
+          {/* Optimized Productivity & Health Panel */}
           <motion.div
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            transition={{ 
+              type: 'tween',
+              duration: 0.3,
+              ease: [0.32, 0.72, 0, 1]
+            }}
             className="fixed right-0 top-0 h-full w-full sm:w-[480px] lg:w-[560px] glass-panel rounded-l-3xl shadow-apple-xl z-50 flex flex-col"
+            style={{ 
+              willChange: 'transform',
+              backfaceVisibility: 'hidden',
+              transform: 'translateZ(0)'
+            }}
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-[var(--border-base)]">
