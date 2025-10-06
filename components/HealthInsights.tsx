@@ -149,38 +149,50 @@ export default function HealthInsights({ isVisible, onClose }: HealthInsightsPro
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
-        >
+        <>
+          {/* Optimized Backdrop - no blur */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 bg-black/70"
+            onClick={onClose}
+            style={{ willChange: 'opacity' }}
+          />
+
+          {/* Optimized Panel */}
           <motion.div
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="mobile-scroll-container absolute right-0 top-0 h-full w-full max-w-md"
+            transition={{ 
+              type: 'tween',
+              duration: 0.3,
+              ease: [0.32, 0.72, 0, 1]
+            }}
+            className="fixed right-0 top-0 h-full w-full max-w-md glass-panel border-l shadow-2xl overflow-hidden rounded-3xl z-50 flex flex-col"
+            style={{ 
+              willChange: 'transform',
+              backfaceVisibility: 'hidden',
+              transform: 'translateZ(0)'
+            }}
           >
-            <div className="h-full p-4">
-              <div className="h-full glass-panel border-l shadow-2xl overflow-hidden rounded-3xl">
-            {/* Advanced Liquid Glass Header */}
+            {/* Header */}
             <div className="glass-surface flex items-center justify-between p-4 border-b border-[var(--border-glass)]">
               <div className="flex items-center gap-3">
                 <Activity size={24} className="text-[var(--accent)]" />
                 <h2 className="text-xl font-semibold text-[var(--fg)]">Здоровье и аналитика</h2>
               </div>
-              <motion.button
+              <button
                 onClick={onClose}
-                className="glass-button p-2 transition-all duration-300"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+                className="glass-button p-2 transition-all duration-300 active:scale-95"
               >
                 <X size={20} />
-              </motion.button>
+              </button>
             </div>
 
-            {/* Advanced Glass Tabs */}
+            {/* Tabs */}
             <div className="glass-frosted flex border-b border-[var(--border-glass)]">
               {[
                 { id: 'overview', label: 'Обзор', icon: <Activity size={16} /> },
@@ -188,27 +200,23 @@ export default function HealthInsights({ isVisible, onClose }: HealthInsightsPro
                 { id: 'activity', label: 'Активность', icon: <Zap size={16} /> },
                 { id: 'stress', label: 'Самочувствие', icon: <Heart size={16} /> }
               ].map((tab) => (
-                <motion.button
+                <button
                   key={tab.id}
                   onClick={() => setSelectedTab(tab.id as any)}
                   className={`flex-1 p-3 flex items-center justify-center gap-2 transition-all duration-300 relative ${
                     selectedTab === tab.id
                       ? 'text-[var(--accent)]'
-                      : 'text-[var(--fg-secondary)] hover:text-[var(--fg)]'
+                      : 'text-[var(--fg-secondary)]'
                   }`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   {selectedTab === tab.id && (
-                    <motion.div
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)]"
-                      layoutId="activeTab"
-                      transition={{ type: "spring", duration: 0.5 }}
-                    />
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)]" />
                   )}
                   {tab.icon}
                   <span className="text-sm font-medium">{tab.label}</span>
-                </motion.button>
+                </button>
               ))}
             </div>
 
@@ -221,10 +229,9 @@ export default function HealthInsights({ isVisible, onClose }: HealthInsightsPro
                     <h3 className="text-lg font-semibold text-[var(--fg)] mb-3">Здоровье сегодня</h3>
                     <div className="grid grid-cols-2 gap-3">
                       {healthMetrics.map((metric) => (
-                        <motion.div
+                        <div
                           key={metric.id}
-                          whileHover={{ scale: 1.02 }}
-                          className="bg-[var(--bg-secondary)] rounded-xl p-4"
+                          className="bg-[var(--bg-secondary)] rounded-xl p-4 transition-transform active:scale-95"
                         >
                           <div className="flex items-center justify-between mb-2">
                             <div className={`p-2 rounded-lg ${getStatusColor(metric.status).replace('text-', 'bg-').replace(']', '/10]')}`}>
@@ -237,7 +244,7 @@ export default function HealthInsights({ isVisible, onClose }: HealthInsightsPro
                             {metric.unit && <span className="text-sm text-[var(--fg-secondary)] ml-1">{metric.unit}</span>}
                           </div>
                           <div className="text-xs text-[var(--fg-secondary)]">{metric.name}</div>
-                        </motion.div>
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -488,10 +495,8 @@ export default function HealthInsights({ isVisible, onClose }: HealthInsightsPro
                 </div>
               )}
             </div>
-          </div>
-            </div>
           </motion.div>
-        </motion.div>
+        </>
       )}
     </AnimatePresence>
   )

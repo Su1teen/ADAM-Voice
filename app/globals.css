@@ -621,9 +621,43 @@ input, textarea {
   transform: scale(0.98) translateZ(0) !important;
 }
 
+button:active {
+  transform: scale(0.98) translateZ(0) !important;
+  transition: transform 0.1s ease-out !important;
+}
+
 /* Optimize scroll performance */
 .mobile-scroll-container {
   -webkit-overflow-scrolling: touch;
   overflow-y: auto;
   overscroll-behavior-y: contain;
+  will-change: scroll-position;
+}
+
+/* Additional optimizations for panel animations */
+@media (max-width: 768px) {
+  /* Force GPU layers for animated elements */
+  [class*="fixed"][class*="z-"] {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    will-change: transform, opacity;
+  }
+  
+  /* Optimize glass effects */
+  .glass-surface,
+  .glass-frosted {
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
