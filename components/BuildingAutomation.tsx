@@ -128,19 +128,15 @@ export default function BuildingAutomation({ isVisible, onClose }: BuildingAutom
   return (
     <AnimatePresence>
       {isVisible && (
-        <>
-          {/* Optimized Backdrop - no blur on mobile */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/70 z-40"
-            onClick={onClose}
-            style={{ willChange: 'opacity' }}
-          />
-
-          {/* Optimized Building Automation Panel */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 z-50 bg-black/70"
+          onClick={onClose}
+          style={{ willChange: 'opacity' }}
+        >
           <motion.div
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
@@ -150,13 +146,15 @@ export default function BuildingAutomation({ isVisible, onClose }: BuildingAutom
               duration: 0.3,
               ease: [0.32, 0.72, 0, 1]
             }}
-            className="fixed right-0 top-0 h-full w-full sm:w-[480px] lg:w-[560px] glass-panel rounded-l-3xl shadow-apple-xl z-50 flex flex-col"
+            className="mobile-scroll-container absolute right-0 top-0 bottom-0 w-full max-w-md"
             style={{ 
               willChange: 'transform',
               backfaceVisibility: 'hidden',
               transform: 'translateZ(0)'
             }}
           >
+            <div className="h-full p-4">
+              <div className="h-full glass-panel border-l shadow-2xl overflow-hidden rounded-3xl flex flex-col">
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-[var(--border-base)]">
               <div className="flex items-center gap-3">
@@ -509,8 +507,10 @@ export default function BuildingAutomation({ isVisible, onClose }: BuildingAutom
                 </div>
               )}
             </div>
+          </div>
+            </div>
           </motion.div>
-        </>
+        </motion.div>
       )}
     </AnimatePresence>
   )

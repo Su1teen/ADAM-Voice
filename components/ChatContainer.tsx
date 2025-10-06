@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import ChatMessage from './ChatMessage'
+import { MessageCircle } from 'react-feather'
 
 interface ChatContainerProps {
   messages: Array<{
@@ -31,28 +32,42 @@ export default function ChatContainer({ messages, isVisible }: ChatContainerProp
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed top-0 left-0 right-0 bottom-24 md:bottom-32 pointer-events-none z-30"
+          className="fixed inset-0 z-50 bg-black/70"
+          onClick={() => {}} // Backdrop doesn't close chat
           style={{ willChange: 'opacity' }}
         >
-          <div className="h-full max-w-4xl mx-auto p-4 pt-20 md:pt-4 flex flex-col">
-            {/* Liquid Glass Header */}
-            <div className="flex-shrink-0 mb-4">
-              <div className="glass-panel p-4 pointer-events-auto">
-                <h2 className="text-lg font-semibold text-[var(--fg)] mb-1">
-                  Чат с вашим ИИ
-                </h2>
-                <p className="text-sm text-[var(--fg-secondary)]">
-                  Общайтесь с вашим ИИ-помощником
-                </p>
-              </div>
-            </div>
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ 
+              type: 'tween',
+              duration: 0.3,
+              ease: [0.32, 0.72, 0, 1]
+            }}
+            className="mobile-scroll-container absolute right-0 top-0 bottom-0 w-full max-w-md"
+            style={{ 
+              willChange: 'transform',
+              backfaceVisibility: 'hidden',
+              transform: 'translateZ(0)'
+            }}
+          >
+            <div className="h-full p-4">
+              <div className="h-full glass-panel border-l shadow-2xl overflow-hidden rounded-3xl flex flex-col">
+                {/* Header */}
+                <div className="glass-surface flex items-center justify-between p-4 border-b border-[var(--border-glass)]">
+                  <div className="flex items-center gap-3">
+                    <MessageCircle size={24} className="text-[var(--accent)]" />
+                    <h2 className="text-xl font-semibold text-[var(--fg)]">Чат с вашим ИИ</h2>
+                  </div>
+                </div>
 
-            {/* Liquid Glass Messages container */}
-            <div 
-              ref={scrollRef}
-              className="mobile-scroll-container flex-1 overflow-y-auto pointer-events-auto glass-panel"
-              style={{ scrollbarWidth: 'thin' }}
-            >
+                {/* Messages container */}
+                <div 
+                  ref={scrollRef}
+                  className="flex-1 overflow-y-auto p-6"
+                  style={{ scrollbarWidth: 'thin' }}
+                >
               {messages.length === 0 ? (
                 <div className="h-full flex items-center justify-center text-[var(--fg-muted)] text-center p-8">
                   <div>
@@ -76,6 +91,8 @@ export default function ChatContainer({ messages, isVisible }: ChatContainerProp
               )}
             </div>
           </div>
+            </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
