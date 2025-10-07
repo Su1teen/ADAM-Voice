@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import ChatMessage from './ChatMessage'
-import { MessageCircle } from 'react-feather'
+import { MessageCircle, X } from 'react-feather'
 
 interface ChatContainerProps {
   messages: Array<{
@@ -13,9 +13,10 @@ interface ChatContainerProps {
     timestamp?: number
   }>
   isVisible: boolean
+  onClose: () => void
 }
 
-export default function ChatContainer({ messages, isVisible }: ChatContainerProps) {
+export default function ChatContainer({ messages, isVisible, onClose }: ChatContainerProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -33,7 +34,7 @@ export default function ChatContainer({ messages, isVisible }: ChatContainerProp
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
           className="fixed inset-0 z-50 bg-black/70"
-          onClick={() => {}} // Backdrop doesn't close chat
+          onClick={onClose}
           style={{ willChange: 'opacity' }}
         >
           <motion.div
@@ -45,10 +46,12 @@ export default function ChatContainer({ messages, isVisible }: ChatContainerProp
               duration: 0.3,
               ease: [0.32, 0.72, 0, 1]
             }}
+            onClick={(e) => e.stopPropagation()}
             className="mobile-scroll-container absolute right-0 top-0 bottom-0 w-full max-w-md"
             style={{ 
               willChange: 'transform',
               backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
               transform: 'translateZ(0)'
             }}
           >
@@ -60,6 +63,14 @@ export default function ChatContainer({ messages, isVisible }: ChatContainerProp
                     <MessageCircle size={24} className="text-[var(--accent)]" />
                     <h2 className="text-xl font-semibold text-[var(--fg)]">Чат с вашим ИИ</h2>
                   </div>
+                  <motion.button
+                    onClick={onClose}
+                    className="glass-button p-2 rounded-full"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <X size={20} />
+                  </motion.button>
                 </div>
 
                 {/* Messages container */}

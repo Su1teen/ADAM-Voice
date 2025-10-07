@@ -363,10 +363,12 @@ export default function ProductivityHealth({ isVisible, onClose }: ProductivityH
               duration: 0.3,
               ease: [0.32, 0.72, 0, 1]
             }}
+            onClick={(e) => e.stopPropagation()}
             className="mobile-scroll-container absolute right-0 top-0 bottom-0 w-full max-w-md"
             style={{ 
               willChange: 'transform',
               backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
               transform: 'translateZ(0)'
             }}
           >

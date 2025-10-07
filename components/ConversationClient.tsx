@@ -311,7 +311,11 @@ const ConversationClient: FC<ConversationClientProps> = ({ conversationId }) => 
       </div>
 
       {/* Chat container */}
-      <ChatContainer messages={messages} isVisible={showChat} />
+      <ChatContainer 
+        messages={messages} 
+        isVisible={showChat} 
+        onClose={() => setShowChat(false)}
+      />
 
       {/* Building Automation */}
       <BuildingAutomation 

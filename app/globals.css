@@ -653,6 +653,48 @@ button:active {
   }
 }
 
+/* Safari-specific fixes for flickering */
+@supports (-webkit-backdrop-filter: blur(1px)) {
+  .glass-panel,
+  .glass-card,
+  [class*="glass-"] {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+  }
+  
+  /* Fix for iOS Safari flickering during animations */
+  [class*="motion.div"] {
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+  }
+}
+
+/* Additional iOS Safari optimization */
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari specific */
+  * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
+  
+  .glass-panel,
+  .glass-card {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  /* Prevent flickering on scroll */
+  body {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
   *,
