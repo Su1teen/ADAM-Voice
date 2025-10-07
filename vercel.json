@@ -1,9 +1,5 @@
 {
   "buildCommand": "next build",
   "outputDirectory": ".next",
-  "framework": "nextjs",
-  "env": {
-    "ELEVENLABS_AGENT_ID": "@elevenlabs_agent_id",
-    "ELEVENLABS_API_KEY": "@elevenlabs_api_key"
-  }
+  "framework": "nextjs"
 }
