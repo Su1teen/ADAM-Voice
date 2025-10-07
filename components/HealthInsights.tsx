@@ -206,8 +206,6 @@ export default function HealthInsights({ isVisible, onClose }: HealthInsightsPro
                       ? 'text-[var(--accent)]'
                       : 'text-[var(--fg-secondary)]'
                   }`}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                 >
                   {selectedTab === tab.id && (
                     <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)]" />
